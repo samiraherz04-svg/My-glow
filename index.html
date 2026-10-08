@@ -1,0 +1,956 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#fff8fb">
+<link rel="manifest" href="./manifest.json">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<meta name="description" content="My Glow 🌷 – your personal glow-up and self-care app.">
+<title>My Glow 🌷</title>
+<style>
+:root{color-scheme:light dark;--bg:#fff8fb;--surface:#fff;--soft:#fff0f6;--pink:#e889ae;--deep:#8f4567;--text:#442d38;--muted:#8e7180;--line:#f1dce6;--shadow:0 10px 30px rgba(160,92,120,.12)}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;background:var(--bg);color:var(--text)}
+#app{min-height:100vh;background:var(--bg);padding:22px 16px 92px;max-width:720px;margin:auto}
+header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.brand{font-weight:800;font-size:22px;letter-spacing:-.4px}.brand span{color:var(--pink)}
+.icon{border:1px solid var(--line);background:var(--surface);width:42px;height:42px;border-radius:15px;box-shadow:var(--shadow);font-size:19px}
+.hidden{display:none!important}
+.hero{background:linear-gradient(135deg,#ffe8f1,#fff8f5 70%);border:1px solid #f6d8e5;border-radius:28px;padding:23px;box-shadow:var(--shadow);position:relative;overflow:hidden}.hero:after{content:'✦';position:absolute;right:22px;top:17px;color:#eaa3be;font-size:30px}.eyebrow{font-size:13px;color:var(--deep);font-weight:700}.hero h1{margin:5px 0 4px;font-size:28px;letter-spacing:-1px}.hero p{margin:0;color:var(--muted);font-size:14px}.progress{margin-top:18px;background:#fff;border-radius:99px;height:11px;overflow:hidden}.bar{height:100%;width:38%;background:linear-gradient(90deg,#e889ae,#f4b8cc);border-radius:99px;transition:.25s}.progressText{display:flex;justify-content:space-between;margin-top:8px;font-size:12px;color:var(--muted)}
+.section{margin-top:22px}.sectionTitle{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.sectionTitle h2{font-size:18px;margin:0}.small{font-size:12px;color:var(--muted)}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:11px}.cards>.task{width:100%;text-align:left;color:inherit;font:inherit}.cards>.task.card{appearance:none;-webkit-appearance:none}.card{background:var(--surface);border:1px solid var(--line);border-radius:21px;padding:15px;box-shadow:var(--shadow)}.task{display:flex;gap:11px;align-items:center;cursor:pointer}.check{width:29px;height:29px;border-radius:10px;border:1.5px solid #e4bdce;background:var(--soft);display:grid;place-items:center;flex:none}.task.done .check{background:var(--pink);border-color:var(--pink);color:white}.task.done .taskName{text-decoration:line-through;color:var(--muted)}.taskName{font-weight:700;font-size:14px}.taskMeta{font-size:11px;color:var(--muted);margin-top:2px}
+.challenge{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:17px;box-shadow:var(--shadow)}.challengeTop{display:flex;justify-content:space-between;gap:12px}.badge{background:#fff0c9;color:#876421;padding:6px 9px;border-radius:10px;font-size:11px;font-weight:800}.challenge h3{margin:2px 0 5px}.challenge p{margin:0;color:var(--muted);font-size:13px}.days{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}.challenge .days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}.day{width:31px;height:31px;border-radius:50%;display:grid;place-items:center;background:#faf0f4;color:var(--muted);font-size:11px;font-weight:700}.day.done{background:#9f4f73;color:white;box-shadow:inset 0 0 0 2px #f5c2d6,0 3px 10px rgba(159,79,115,.22);transform:scale(1.03)}
+.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(720px,100%);padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:rgba(255,248,251,.94);backdrop-filter:blur(16px);border-top:1px solid var(--line);display:flex;gap:2px;overflow-x:auto;z-index:5;scrollbar-width:none}.nav::-webkit-scrollbar{display:none}.nav button{border:0;background:none;color:var(--muted);font-size:10px;font-weight:700;padding:5px 9px;min-width:64px;flex:0 0 auto}.nav button span{display:block;font-size:19px;margin-bottom:3px}.nav button.active{color:var(--deep)}
+.memoryToolbar{display:flex;gap:8px;overflow:auto;padding-bottom:3px}.memoryToolbar .btn{white-space:nowrap}.folderList{display:flex;gap:8px;flex-wrap:wrap;overflow:visible;padding:2px 0 8px;position:relative;z-index:2}.folderChip{cursor:pointer;touch-action:manipulation;position:relative;z-index:3}.folderChip{border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:99px;padding:9px 12px;white-space:nowrap;font-weight:700}.folderChip.active{background:var(--soft);color:var(--deep);border-color:#edbfd1}.memoryGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.memoryCard{overflow:hidden;padding:0;background:#ffe6f0!important;border:1px solid #edbfd1!important;border-radius:18px}.memoryMedia{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;background:var(--soft);border-radius:16px 16px 0 0}.memoryBody{padding:11px}.memoryNote{width:100%;min-height:64px;margin-top:7px;border:0;border-radius:12px;padding:9px;background:var(--soft);color:var(--text);font:inherit;resize:vertical}.memoryNoteDisplay{margin-top:7px;border:0;border-radius:12px;padding:11px;background:#ffe6f0!important;color:var(--text);min-height:40px;line-height:1.4;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}.memoryWithNote{background:#ffe6f0!important;padding:10px!important;border:1px solid #edbfd1!important}.memoryWithNote .memoryMedia{border-radius:14px}.memoryWithNote .memoryBody{padding:8px 2px 2px}.memoryEditBar{display:flex;justify-content:flex-end;margin-bottom:10px}.memoryEditBar .btn{background:#fff0f6;color:#9a5874;border:1px solid #f0d2df}.memoryTopEdit{background:var(--soft)!important;color:var(--deep)!important;border:1px solid #edbfd1!important}.memoryEmpty{padding:24px 12px;text-align:center;color:var(--muted)}.memoryMeta{font-size:10px;color:var(--muted);margin-top:4px}.memoryDateBox{display:block;margin-top:8px;padding:0;background:transparent;color:var(--muted);font-size:11px;font-weight:500;border:0}.memoryEditMode{display:none;position:relative;z-index:20;pointer-events:auto}.memoryEditMode.active{display:flex;gap:6px;align-items:center}.memoryEditMode .btn{position:relative;z-index:21;pointer-events:auto;touch-action:manipulation;-webkit-appearance:none;appearance:none}.memoryNoteModal{position:fixed;inset:0;background:rgba(65,35,50,.48);z-index:10000;display:none;align-items:flex-end;justify-content:center;padding:16px}.memoryNoteModal.active{display:flex}.memoryNoteModalBox{width:min(720px,100%);background:var(--surface);border-radius:24px;padding:18px;box-shadow:0 20px 60px rgba(0,0,0,.25)}.memoryNoteModal textarea{width:100%;min-height:130px;box-sizing:border-box;border:1px solid #edbfd1;border-radius:16px;padding:13px;background:#fff0f6;color:var(--text);font:inherit;resize:vertical}.memoryNoteModalActions{display:flex;gap:8px;margin-top:10px}.memoryNoteModalActions .btn{flex:1}.memoryQuickFolder{white-space:nowrap}.workoutRoutineList{margin-top:4px}.workoutRoutineList .routine{padding:14px 0}.workoutRoutineList .routine .btn{background:var(--deep);color:#fff}.workoutCustomizeToggle{display:flex;justify-content:center;margin-top:6px}.workoutCustomizeToggle button{border:0;background:transparent;color:#b06a88;font-size:20px;letter-spacing:4px;padding:4px 12px;cursor:pointer}.folderCreate{display:flex;gap:8px}.folderCreate input{min-width:0;flex:1;border:1px solid var(--line);border-radius:13px;padding:10px;background:var(--surface);color:var(--text);font:inherit}
+.panel{display:none}.panel.active{display:block}.pillrow{display:flex;gap:8px;overflow:auto;padding-bottom:3px}.pill{border:1px solid var(--line);background:var(--surface);border-radius:99px;padding:9px 13px;white-space:nowrap;color:var(--muted);font-weight:700}.pill.active{background:var(--soft);color:var(--deep);border-color:#edbfd1}.routine{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid var(--line)}.routine:last-child{border:0}.btn{border:0;border-radius:13px;background:var(--deep);color:white;padding:9px 12px;font-weight:700}.mood{display:flex;justify-content:space-between;gap:7px}.mood button{flex:1;border:1px solid var(--line);background:var(--surface);border-radius:16px;padding:12px 4px;font-size:21px}.quote{margin-top:15px;padding:16px;border-radius:19px;background:#fff5e9;border:1px solid #f4dfc7;color:#785b4a;font-size:14px;line-height:1.45}
+
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.stat{text-align:center;padding:14px 8px}.stat b{display:block;font-size:22px;margin-top:3px}.stat span{font-size:10px;color:var(--muted)}
+.trackerRow{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--line)}.trackerRow:last-child{border:0}.trackerControls{display:flex;align-items:center;gap:8px}.roundBtn{width:32px;height:32px;border-radius:50%;border:1px solid var(--line);background:var(--soft);font-weight:800;color:var(--deep)}
+.water{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}.water button{width:42px;height:52px;border:1px solid #ead0da;background:linear-gradient(180deg,#fffafb,#fff);border-radius:15px;display:flex;align-items:center;justify-content:center;padding:0;box-shadow:0 3px 10px rgba(170,93,125,.08);transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}.water button:active{transform:scale(.94)}.water button.filled{background:linear-gradient(180deg,#fff7fb,#ffe9f2);border-color:#e8aec4;box-shadow:0 4px 12px rgba(196,91,132,.14)}.glassIcon{position:relative;width:23px;height:30px;border:2px solid #d59ab4;border-top:3px solid #c984a4;border-radius:5px 5px 8px 8px;overflow:hidden;background:linear-gradient(135deg,rgba(255,255,255,.95),rgba(255,244,249,.75));box-sizing:border-box;transform:perspective(40px) rotateX(-2deg)}.glassIcon:before{content:"";position:absolute;left:-3px;right:-3px;top:-4px;height:6px;border:2px solid #c984a4;border-bottom:0;border-radius:7px 7px 0 0;background:rgba(255,255,255,.7)}.glassIcon:after{content:"";position:absolute;top:5px;left:4px;width:4px;height:12px;border-radius:99px;background:rgba(255,255,255,.9);transform:rotate(7deg)}.glassFill{position:absolute;left:0;right:0;bottom:0;height:0;background:linear-gradient(180deg,#f7cfe0,#eaa5c2);transition:height .35s ease}.water button.filled .glassFill{height:70%}
+.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}.calHead{font-size:10px;color:var(--muted);text-align:center}.calDay{aspect-ratio:1;border-radius:11px;background:var(--soft);display:grid;place-items:center;font-size:11px}.calDay.today{background:var(--pink);color:white;font-weight:800}.calDay.glow{box-shadow:inset 0 0 0 2px #f2c0d2}.calDay.marked{background:#9f4f73;color:#fff;font-weight:800;box-shadow:inset 0 0 0 2px #f5c2d6,0 3px 10px rgba(159,79,115,.18)}
+.level{height:12px;background:var(--soft);border-radius:99px;overflow:hidden;margin-top:10px}.level>div{height:100%;background:linear-gradient(90deg,#e889ae,#f5c0d3);border-radius:99px}.reward{display:flex;gap:10px;justify-content:space-between;align-items:center;padding:13px 0;border-bottom:1px solid var(--line)}.reward:last-child{border:0}.reward .btn{padding:7px 9px;font-size:11px;white-space:nowrap}.locked{opacity:.5}.journal{width:100%;min-height:130px;border:1px solid var(--line);border-radius:16px;padding:13px;background:var(--surface);color:var(--text);font:inherit;resize:vertical}.save{margin-top:9px;width:100%;padding:12px;border:0;border-radius:14px;background:var(--deep);color:#fff;font-weight:800}.journalDailyCard{background:linear-gradient(135deg,#fff0f6,#fffafc);border-color:#f1d5e1}.journalQuestion{margin:12px 0 10px;padding:15px 16px;border-radius:18px;background:#ffe6f0;color:#75445a;font-weight:800;font-size:16px;line-height:1.45}.journalDailyCard .journal{min-height:145px;border-color:#f0d3df;background:#fffafd}.journalDailyCard .save{background:linear-gradient(135deg,#e889ae,#d8759d)}
+#celebrationLayer{position:fixed;inset:0;pointer-events:none;z-index:99;overflow:hidden}
+.celebratePiece{position:absolute;left:50%;top:50%;font-size:22px;will-change:transform,opacity;animation-fill-mode:forwards;filter:drop-shadow(0 4px 8px rgba(255,255,255,.18))}
+.anim-heart{animation:heartFloat 2.25s ease-out forwards}
+.anim-star{animation:starBurst 2.1s cubic-bezier(.2,.8,.2,1) forwards}
+.anim-sparkle{animation:sparkleRain 2.4s ease-out forwards}
+.anim-bow{animation:bowPop 2.2s ease-out forwards}
+.anim-petal{animation:petalFall 2.5s ease-out forwards}
+@keyframes heartFloat{0%{opacity:0;transform:translate(-50%,0) scale(.4)}20%{opacity:1}100%{opacity:0;transform:translate(calc(-50% + var(--x)),calc(-50% + var(--y))) rotate(var(--r)) scale(1.15)}}
+@keyframes starBurst{0%{opacity:0;transform:translate(-50%,-50%) scale(.2)}25%{opacity:1}100%{opacity:0;transform:translate(calc(-50% + var(--x)),calc(-50% + var(--y))) rotate(180deg) scale(1.5)}}
+@keyframes sparkleRain{0%{opacity:0;transform:translate(-50%,0) scale(.3)}15%{opacity:1}100%{opacity:0;transform:translate(calc(-50% + var(--x)),var(--y)) rotate(240deg) scale(1)}}
+@keyframes bowPop{0%{opacity:0;transform:translate(-50%,-50%) scale(.2)}25%{opacity:1;transform:translate(-50%,-50%) scale(1.25)}100%{opacity:0;transform:translate(calc(-50% + var(--x)),calc(-50% + var(--y))) scale(.75) rotate(var(--r))}}
+@keyframes petalFall{0%{opacity:0;transform:translate(-50%,0) rotate(0) scale(.5)}15%{opacity:1}100%{opacity:0;transform:translate(calc(-50% + var(--x)),var(--y)) rotate(360deg) scale(1)}}
+.weekBadge{background:var(--soft);color:var(--deep);border-radius:99px;padding:5px 9px;font-size:10px;font-weight:800}
+.rewardHistory{margin-top:10px;padding-top:10px;border-top:1px solid var(--line)}
+@media(min-width:600px){#app{padding-left:28px;padding-right:28px}.cards{grid-template-columns:repeat(3,1fr)}}
+body.dark{--bg:#21171c;--surface:#2b2025;--soft:#3a2730;--text:#f7eaf0;--muted:#c3aab5;--line:#49343e;--deep:#f0a2c0;--shadow:0 10px 30px rgba(0,0,0,.22)}
+body.dark .hero{background:linear-gradient(135deg,#422936,#2b2025);border-color:#654553}
+body.dark .progress{background:#3a2b32}
+body.dark .nav{background:rgba(33,23,28,.94)}
+body.dark .day{background:#3a2730}body.dark .day.done{background:#9f4f73;color:#fff;box-shadow:inset 0 0 0 2px #e7a2bf,0 3px 10px rgba(0,0,0,.25)}
+body.dark .pill{background:var(--surface)}
+body.dark .quote{background:#33272a;border-color:#55403d;color:#e7c9bb}
+body.dark .journal{background:var(--surface);color:var(--text)}
+.themeButtons{display:grid;grid-template-columns:1fr 1fr;gap:9px}.themeBtn{border:1px solid var(--line);background:var(--surface);color:var(--text);border-radius:14px;padding:12px;font-weight:800}.themeBtn.active{background:var(--soft);border-color:#edbfd1;color:var(--deep)}
+.settingRow{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}.settingRow:last-child{border-bottom:0}
+.toggle{border:1px solid var(--line);background:var(--soft);color:var(--deep);border-radius:99px;padding:8px 12px;font-weight:800}
+
+.dailyQuoteCard{background:linear-gradient(135deg,var(--soft),var(--card));}.dailyQuoteCard h3{margin:6px 0 2px;font-size:20px;line-height:1.35}.weeklyRide{margin-top:14px}.weeklyTask{width:100%;display:flex;align-items:center;gap:14px;text-align:left}.weeklyTask.done{opacity:.75}.weeklyTask.done .taskName{text-decoration:line-through}.weeklyTask .check{font-size:24px;min-width:42px;text-align:center}
+.workoutCard{background:linear-gradient(180deg,#fffafd,#fff);border:1px solid #f3dce7}
+.workoutTabs{display:flex;gap:8px;overflow:auto;padding-bottom:4px}
+.workoutTabs button{white-space:nowrap;padding:10px 14px;border-radius:16px}
+.workoutTabs button.active{background:#df8faf;color:white}
+.exerciseRow{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid #f5e5eb}
+.exerciseRow:last-child{border-bottom:0}
+.exerciseRow.done .exerciseInfo{text-decoration:line-through;opacity:.55}
+.exerciseCheck{width:24px;height:24px;border-radius:8px;border:1px solid #e7bfd0;background:#fff;display:grid;place-items:center;flex:none}
+.exerciseRow.done .exerciseCheck{background:#df8faf;color:#fff}
+.exerciseInfo{flex:1;min-width:0}
+.exerciseName{font-weight:750}
+.exerciseMeta{font-size:12px;opacity:.65;margin-top:3px}
+.exerciseActions{display:flex;gap:5px}
+.exerciseActions button{padding:8px 9px;font-size:12px;border-radius:12px}
+.workoutForm{display:grid;grid-template-columns:1fr 90px 90px;gap:8px;margin-top:12px}
+.workoutForm input{min-width:0;padding:11px;border:1px solid #efd8e3;border-radius:14px;background:#fff;color:inherit}
+@media(max-width:430px){.workoutForm{grid-template-columns:1fr 1fr}.workoutForm input:first-child{grid-column:1/-1}}
+
+
+/* Girly workout flow */
+.workoutCard{background:linear-gradient(180deg,#fffafd,#fff);border:1px solid #f2d5e2}
+.workoutTabs{display:flex;gap:8px;overflow:auto;padding:3px 1px 7px}
+.workoutTabs button{white-space:nowrap;padding:10px 14px;border-radius:18px;background:#fff1f7;color:#8d526b;border:1px solid #f3d6e3;box-shadow:none}
+.workoutTabs button.active{background:#f2bfd3;color:#6f3e53;border-color:#edabc5}
+.workoutStartBtn{background:linear-gradient(135deg,#f2bfd3,#e8a6c1)!important;color:#fff!important;box-shadow:0 8px 20px #e5a9c433}
+.workoutFinishBtn{background:#f8dce8!important;color:#7c4660!important}
+.workoutBackBtn{background:#fff0f6!important;color:#a15b78!important;border:1px solid #f1d5e1}
+.workoutCustomizeBtn{background:#fff5f9!important;color:#a15b78!important;border:1px solid #f0d5e1}
+.workoutHint{text-align:center;margin-top:9px;color:#9b7181}
+.workoutProgressTop{display:flex;justify-content:space-between;align-items:center;background:#fff3f8;border-radius:18px;padding:11px 14px;margin:12px 0;color:#92536d;font-weight:700}
+.exerciseRow{display:flex;align-items:center;gap:10px;padding:13px 10px;border-bottom:1px solid #f6e3eb;background:#fffafb;border-radius:16px;margin:7px 0;box-shadow:0 4px 12px #e8bfd01c}
+.exerciseRow.done{background:#fff0f6}
+.exerciseRow.done .exerciseInfo{text-decoration:line-through;opacity:.55}
+.exerciseCheck{width:28px;height:28px;border-radius:50%;border:1px solid #edbfd1;background:#fff;display:grid;place-items:center;flex:none;color:#fff;font-weight:900}
+.exerciseRow.done .exerciseCheck{background:#e6a6c0;border-color:#e6a6c0}
+.exerciseInfo{flex:1;min-width:0}
+.exerciseName{font-weight:750;color:#684453}
+.exerciseMeta{font-size:12px;opacity:.65;margin-top:3px;color:#9a6b7c}
+.exerciseActions{display:flex;gap:5px}
+.exerciseActions button{padding:8px 9px;font-size:12px;border-radius:14px;background:#fff0f6!important;color:#a25c79!important;border:1px solid #f0d2df!important}
+.workoutForm{display:grid;grid-template-columns:1fr 90px 90px;gap:8px;margin-top:12px}
+.workoutForm input{min-width:0;padding:11px;border:1px solid #efd4e0;border-radius:15px;background:#fffafd;color:inherit}
+.workoutEditTitle{font-weight:800;color:#874b64;margin:12px 0 6px}
+.workoutEditRow{display:flex;align-items:center;gap:8px;padding:10px 4px;border-bottom:1px solid #f5e1e9}
+.workoutEditRow>div:first-child{flex:1}
+@media(max-width:430px){.workoutForm{grid-template-columns:1fr 1fr}.workoutForm input:first-child{grid-column:1/-1}}
+
+
+/* Final light girly styling for weekly goal + workout */
+.weeklyRide .weeklyTask{background:var(--surface)!important;color:var(--text)!important;border:1px solid var(--line)!important;border-radius:18px!important;padding:14px!important;box-shadow:none!important;-webkit-appearance:none!important;appearance:none!important;}
+.weeklyRide .weeklyTask:hover,.weeklyRide .weeklyTask:active{background:var(--surface)!important;color:var(--text)!important;}
+.weeklyRide .weeklyTask .check{background:var(--soft)!important;color:var(--deep)!important;border:1px solid #e4bdce!important;}
+.weeklyRide .weeklyTask.done .check{background:var(--pink)!important;color:#fff!important;border-color:var(--pink)!important;}
+.workoutTabs button,.workoutStartBtn,.workoutFinishBtn,.workoutBackBtn,.workoutCustomizeBtn,.workoutEditRow button,.workoutForm button{background:#fff0f6!important;color:#9a5874!important;border:1px solid #f0d2df!important;box-shadow:none!important;-webkit-appearance:none!important;appearance:none!important;}
+.workoutTabs button.active{background:#f2bfd3!important;color:#713f55!important;border-color:#edabc5!important;}
+.workoutStartBtn{background:linear-gradient(135deg,#f2bfd3,#e8a6c1)!important;color:#fff!important;border-color:#e8a6c1!important;}
+.workoutFinishBtn{background:#f8dce8!important;color:#7c4660!important;}
+.workoutBackBtn,.workoutCustomizeBtn{background:#fff5f9!important;color:#9a5874!important;}
+.workoutEditRow{background:#fffafb!important;border:1px solid #f3dce7!important;border-radius:17px!important;padding:11px!important;margin:8px 0!important;}
+.workoutEditRow button{padding:8px 10px!important;border-radius:13px!important;font-size:12px!important;font-weight:700!important;}
+.workoutEditRow button:active{background:#f8dce8!important;}
+.workoutForm input{background:#fff!important;color:var(--text)!important;border:1px solid #efd4e0!important;}
+.workoutForm + .wide{background:#fff0f6!important;color:#9a5874!important;border:1px solid #f0d2df!important;}
+.exerciseRow{background:#fff!important;border:1px solid #f3dce7!important;border-radius:17px!important;box-shadow:none!important;}
+.exerciseRow.done{background:#fff0f6!important;}
+.exerciseCheck{background:#fff!important;color:#9a5874!important;}
+.exerciseRow.done .exerciseCheck{background:#e889ae!important;color:#fff!important;}
+.routineStep{border-bottom:1px solid var(--line);transition:.2s}.routineStep:last-of-type{border-bottom:0}.routineStep.done{opacity:.55}.routineStep.done .taskName{text-decoration:line-through}.routineStep .check{width:29px;height:29px;border-radius:10px;border:1.5px solid #e4bdce;background:var(--soft);display:grid;place-items:center;flex:none}.routineStep.done .check{background:var(--pink);border-color:var(--pink);color:#fff}.routineStep .taskMeta{font-size:12px;color:var(--muted);margin-top:3px}.workoutOpenCard{background:#fffafd;border:1px solid #f2d5e2;box-shadow:var(--shadow);}
+.workoutMoreBtn{display:block;margin:8px auto 0;border:0;background:transparent;color:#b06a88;font-size:20px;letter-spacing:4px;padding:4px 12px;}
+
+.folderGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.folderTile{border:1px solid var(--line);background:var(--surface);border-radius:18px;overflow:hidden;padding:0;text-align:left;cursor:pointer;box-shadow:0 5px 16px rgba(160,90,120,.08);touch-action:manipulation}.folderTile:active{transform:scale(.98)}.folderCover{width:100%;aspect-ratio:1/1;background:var(--soft);display:flex;align-items:center;justify-content:center;overflow:hidden}.folderCover img{width:100%;height:100%;object-fit:cover}.folderCoverPlaceholder{font-size:38px}.folderTileBody{padding:10px 11px}.folderTileName{font-weight:800;color:var(--deep);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.folderTileCount{font-size:11px;color:var(--muted);margin-top:3px}.memoryCategories{display:flex;gap:8px;overflow-x:auto;padding:4px 0 10px}.memoryCategory{position:relative;z-index:50;pointer-events:auto;border:1px solid #edbfd1;background:#fff0f6;color:#9a5874;border-radius:14px;padding:10px 16px;font-weight:800;white-space:nowrap;cursor:pointer;touch-action:manipulation;display:inline-flex;align-items:center;justify-content:center;min-height:42px;box-sizing:border-box;user-select:none;-webkit-tap-highlight-color:transparent}.memoryCategory:active{transform:scale(.97)}.memoryCategory.active{background:var(--soft);color:var(--deep)}.noteOnlyCard{padding:14px;min-height:150px;display:flex;flex-direction:column;justify-content:space-between;background:#ffe6f0!important;border:1px solid #edbfd1;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}.noteOnlyText{font-size:15px;line-height:1.5;white-space:pre-wrap;color:var(--text)}.memoryLargeOverlay{position:fixed;inset:0;background:rgba(65,35,50,.62);z-index:9999;display:flex;align-items:center;justify-content:center;padding:18px}.memoryLargeBox{width:min(94vw,560px);max-height:92vh;overflow:auto;background:var(--surface);border-radius:24px;padding:12px;box-shadow:0 20px 60px rgba(0,0,0,.25)}.memoryLargeMedia{width:100%;max-height:68vh;object-fit:contain;border-radius:18px;background:var(--soft)}.memoryLargeNote{margin-top:10px;background:var(--soft);border:1px solid #edbfd1;border-radius:15px;padding:12px;line-height:1.5}.memoryClose{float:right;border:0;background:var(--soft);color:var(--deep);border-radius:999px;width:36px;height:36px;font-size:20px;cursor:pointer}.memoryEditMode{display:none}.memoryEditMode.active{display:block}
+
+.cleaningPlan{display:flex;flex-direction:column;gap:10px}.cleaningItem{display:flex;align-items:center;gap:10px;padding:12px 14px;border:1px solid #f0cddd;border-radius:17px;background:#fffafd}.cleaningItem.done{background:#ffeaf2;opacity:.72}.cleaningCheck{width:30px;height:30px;border-radius:10px;border:1.5px solid #e7b8cb;background:#fff;display:grid;place-items:center;flex:none;color:#fff}.cleaningItem.done .cleaningCheck{background:#e889ae;border-color:#e889ae}.cleaningInfo{flex:1;min-width:0}.cleaningName{font-weight:800;color:var(--deep)}.cleaningMeta{font-size:12px;color:var(--muted);margin-top:3px}.cleaningActions{display:flex;gap:6px}.cleaningActions button{border:1px solid #edbfd1;background:#fff0f6;color:#9a5874;border-radius:12px;padding:7px 9px;font-weight:700}.cleaningForm{display:grid;grid-template-columns:1fr auto;gap:8px}.cleaningForm input,.cleaningForm select{width:100%;box-sizing:border-box;border:1px solid #edbfd1;border-radius:14px;padding:11px;background:#fff;color:var(--text);font:inherit}.cleaningForm select{grid-column:2}.cleaningForm .wideInput{grid-column:1/-1}.monthProgress{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.monthStat{background:var(--soft);border-radius:18px;padding:14px}.monthStat b{display:block;font-size:25px;color:var(--deep);margin-top:3px}.monthStat span{font-size:12px;color:var(--muted)}.glowCalendarWrap{margin-top:4px}.glowCalendarHead{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.glowCalendarHead button{border:1px solid #edbfd1;background:#fff0f6;color:#9a5874;border-radius:12px;width:36px;height:36px;font-size:18px;font-weight:800}.glowCalendarTitle{text-align:center;font-weight:800;color:var(--deep)}.glowCalendar{display:grid;grid-template-columns:repeat(7,1fr);gap:7px}.glowCalHead{font-size:10px;color:var(--muted);text-align:center;padding-bottom:2px}.glowCalDay{aspect-ratio:1;border:1px solid var(--line);border-radius:13px;background:var(--surface);color:var(--text);font-weight:700;font-size:11px;position:relative;display:grid;place-items:center}.glowCalDay.today{border-color:#e889ae;box-shadow:inset 0 0 0 2px #f6c5d7}.glowCalDay.hasData{background:#fff0f6;border-color:#edbfd1;color:#8f4567}.glowCalDay.selected{background:#e889ae;color:#fff;border-color:#e889ae;box-shadow:0 5px 14px rgba(196,91,132,.2)}.glowCalDot{position:absolute;bottom:4px;width:5px;height:5px;border-radius:50%;background:#e889ae}.glowCalDay.selected .glowCalDot{background:#fff}.glowDayDetail{margin-top:14px;padding:15px;border-radius:18px;background:linear-gradient(135deg,#fff0f6,#fffafd);border:1px solid #f0d3df}.glowDayDetail h4{margin:0 0 9px;color:#75445a}.glowDayStats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.glowDayStat{background:#fff;border-radius:13px;padding:9px 10px;border:1px solid #f1dce6}.glowDayStat b{display:block;color:var(--deep);font-size:16px}.glowDayStat span{font-size:10px;color:var(--muted)}.glowDayNote{margin-top:10px;padding:10px 11px;background:#ffe6f0;border-radius:13px;font-size:12px;line-height:1.4}.glowDayEmpty{font-size:12px;color:var(--muted);line-height:1.45}
+
+.cleaningGlowHeader{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}.cleaningGlowList{display:flex;flex-direction:column;gap:9px}.cleaningGlowItem{-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;position:relative;z-index:1;display:flex!important;align-items:center;gap:10px;text-align:left;cursor:pointer;touch-action:manipulation}.cleaningGlowItem.done .taskName{text-decoration:line-through;opacity:.65}.cleaningGlowItem.done .taskMeta{text-decoration:line-through;opacity:.55}.cleaningInlineActions{display:flex;gap:5px;margin-left:auto}.cleaningMini{border:1px solid #edbfd1;background:#fff0f6;color:#9a5874;border-radius:10px;padding:6px 8px;font-weight:700;cursor:pointer;touch-action:manipulation}.cleaningGlowForm{margin-top:10px}.cleaningSelect{border:1px solid #edbfd1;border-radius:14px;padding:10px;background:#fff;color:var(--text);font:inherit;width:100%}.cleaningGlowEmpty{cursor:default}
+.goalHistory{margin-top:14px;display:grid;gap:8px}.goalHistoryItem{background:#fff0f6;border:1px solid #f0d2df;border-radius:15px;padding:10px 12px}.goalHistoryDate{font-size:11px;color:#9a5874;font-weight:800}.goalHistoryText{margin-top:3px;line-height:1.35}.memoryEditMode.active{display:flex!important;gap:7px;align-items:center;position:relative;z-index:100;pointer-events:auto}.memoryEditMode.active .btn{pointer-events:auto!important;position:relative;z-index:101;cursor:pointer;touch-action:manipulation}.memoryCard.editing{outline:2px solid #edbfd1}.memoryCard.editing{cursor:default!important}.memoryCard.editing .memoryMedia{pointer-events:none}.memoryCard.editing .memoryEditMode{pointer-events:auto}.weeklyRide .weeklyTask{width:100%;margin-top:8px;touch-action:manipulation;cursor:pointer}.weeklyRide .weeklyTask.done{opacity:.72}.weeklyRide .weeklyTask:active{transform:scale(.99)}</style>
+</head>
+<body>
+<div id="celebrationLayer"></div>
+<div id="app">
+<header><div class="brand">My <span>Glow</span> 🌷</div><button class="icon" onclick="resetDay()">↻</button></header>
+<div id="home" class="panel active">
+<section class="hero"><div class="eyebrow">TUESDAY · 6 OCTOBER</div><h1>Good morning, gorgeous ✨</h1><p>Small steps today. Big glow over time.</p><div class="progress"><div class="bar" id="bar"></div></div><div class="progressText"><span id="progressText">3 von 8 erledigt</span><b id="percent">38%</b></div></section><section class="section card dailyQuoteCard"><div class="eyebrow">DAILY REMINDER ✨</div><h3 id="dailyQuote">You only live once — remember that. 💕</h3><p class="small" id="dailyQuoteSource"></p></section>
+<section class="section"><div class="sectionTitle"><h2>Today's glow 🌸</h2><span class="small">tap to complete</span></div><div class="cards" id="tasks"></div></section>
+<section class="section"><div class="sectionTitle"><h2>30-Day Glow Up 🎀</h2><span class="small">Day 12 / 30</span></div><div class="challenge"><div class="challengeTop"><div><h3>Become your best self</h3><p>Heute: 10 Minuten nur für dich.</p></div><span class="badge">+20 XP</span></div><div class="days" id="days"></div><div class="small" id="challengeStatus" style="margin-top:10px"></div></div></section>
+</div>
+<div id="glow" class="panel"><section class="hero"><div class="eyebrow">GLOW UP</div><h1>Your little transformation ✨</h1><p>Keine Perfektion — nur kleine Dinge, die dir guttun.</p></section><section class="section"><div class="pillrow"><button class="pill active" onclick="setGlowCategory('Daily',this)">Daily</button><button class="pill" onclick="setGlowCategory('Beauty',this)">Beauty</button><button class="pill" onclick="setGlowCategory('Lifestyle',this)">Lifestyle</button><button class="pill" onclick="setGlowCategory('Confidence',this)">Confidence</button><button type="button" class="pill" id="cleaningCategoryBtn" data-glow-category="Cleaning">🧹 Cleaning</button></div></section><section class="section"><div class="cards" id="glowTasks"></div></section><section class="section card" style="display:none"><div class="sectionTitle"><div><h3>🧹 My cleaning plan</h3><span class="small">Plan it your way and keep track of it. 💕</span></div><button type="button" class="btn" onclick="openCleaningForm()">＋ Add</button></div><div id="cleaningPlan" class="cleaningPlan"></div><div id="cleaningForm" style="display:none;margin-top:12px"><div class="cleaningForm"><input id="cleaningName" class="wideInput" placeholder="e.g. Vacuum my room"><select id="cleaningDay"><option value="Every day">Every day</option><option value="Monday">Monday</option><option value="Tuesday">Tuesday</option><option value="Wednesday">Wednesday</option><option value="Thursday">Thursday</option><option value="Friday">Friday</option><option value="Saturday">Saturday</option><option value="Sunday">Sunday</option></select><select id="cleaningFrequency"><option value="Weekly">Weekly</option><option value="Daily">Daily</option><option value="One-time">One-time</option></select></div><div style="display:flex;gap:8px;margin-top:8px"><button type="button" class="save" onclick="saveCleaningTask()">Save task 💕</button><button type="button" class="btn" onclick="closeCleaningForm()">Cancel</button></div></div></section><section class="section card weeklyRide"><div class="sectionTitle"><h3>🐴 Weekly glow goal</h3><span class="small">2× this week</span></div><div id="rideTasks"></div></section></div>
+<div id="beauty" class="panel"><section class="hero"><div class="eyebrow">BEAUTY</div><h1>Soft girl self-care 🧴</h1><p>Deine Beauty-Routinen an einem Ort.</p></section><section class="section card"><div class="routine"><div>🌞 Morning routine<br><span class="small">Brush · cleanse · tea · cucumber · no phone</span></div><button type="button" class="btn" onclick="startRoutine('Morning routine', ['Make your bed 🛏️','Brush your teeth 🪥','Cleanse your face 🫧','Drink a cup of tea ☕','Use a chilled/frozen cucumber briefly 🥒','30 min without your phone 📵'])">Start</button></div><div class="routine"><div>🫧 Hair care<br><span class="small">Deine eigene Lockenroutine</span></div><button type="button" class="btn" onclick="startCurlRoutine()">Start</button></div><div class="routine"><div>🌙 Night routine<br><span class="small">Brush · hair · relax · no phone</span></div><button type="button" class="btn" onclick="startRoutine('Night routine', ['Brush your teeth 🪥','Hair care 💆‍♀️','Take your medication 💊','5 min relax 🧘‍♀️','30 min without your phone 📵','Get ready for bed 🛏️'])">Start</button></div>
+
+<section class="section card workoutCard" id="workoutRoutineCard">
+  <div class="sectionTitle">
+    <div>
+      <h3>🏋️‍♀️ Workout Routine</h3>
+      <span class="small">Choose your routine and press Start ✨</span>
+    </div>
+  </div>
+
+  <div id="workoutStartView" class="workoutRoutineList">
+    <div class="routine">
+      <div>🌷 Soft Glow<br><span class="small">Gentle full-body movement for a soft glow.</span></div>
+      <button type="button" class="btn" onclick="forceStartWorkout('soft')">Start</button>
+    </div>
+    <div class="routine">
+      <div>🍑 Lower Body Glow<br><span class="small">A lower-body focused routine you can customize.</span></div>
+      <button type="button" class="btn" onclick="forceStartWorkout('lower')">Start</button>
+    </div>
+    <div class="routine">
+      <div>✨ Full Body Glow<br><span class="small">Your all-round home workout.</span></div>
+      <button type="button" class="btn" onclick="forceStartWorkout('full')">Start</button>
+    </div>
+    <div class="workoutCustomizeToggle">
+      <button type="button" aria-label="Workout options" onclick="toggleWorkoutOptions()">•••</button>
+    </div>
+    <div id="workoutOptions" class="hidden" style="margin-top:8px">
+      <button type="button" class="wide workoutCustomizeBtn" onclick="openWorkoutEdit()">🎀 Customize your routine</button>
+    </div>
+  </div>
+
+  <div id="workoutActiveView" class="hidden">
+    <button type="button" class="wide workoutBackBtn" onclick="exitWorkout()">← Back to workouts</button>
+    <div id="routineBox" class="card" style="display:block;margin-top:14px;background:var(--soft)"></div>
+  </div>
+
+  <div id="workoutEditView" class="hidden">
+    <div class="workoutEditTitle">🎀 Customize your routine</div>
+    <div id="workoutEditExercises"></div>
+    <div class="workoutForm">
+      <input id="exerciseName" placeholder="Exercise name">
+      <input id="exerciseAmount" placeholder="15 reps">
+      <input id="exerciseMinutes" placeholder="30 sec">
+    </div>
+    <button type="button" class="wide" onclick="addWorkoutExercise()">＋ Add Exercise</button>
+    <button type="button" class="wide workoutBackBtn" onclick="closeWorkoutEdit()">Done 🎀</button>
+  </div>
+</section>
+
+
+</section></div>
+<div id="mind" class="panel"><section class="hero"><div class="eyebrow">MIND</div><h1>How are you feeling? 🩷</h1><p>Check in without judging yourself.</p></section><section class="section card"><div class="mood" style="flex-wrap:wrap"><button type="button" onclick="mood('🥰')">🥰</button><button type="button" onclick="mood('😊')">😊</button><button type="button" onclick="mood('😐')">😐</button><button type="button" onclick="mood('😔')">😔</button><button type="button" onclick="mood('😢')">😢</button><button type="button" onclick="mood('😡')">😡</button><button type="button" onclick="mood('😴')">😴</button></div><div class="quote" id="moodText">Wähle kurz, wie du dich gerade fühlst. 🩷</div></section></div>
+<div id="more" class="panel"><section class="hero"><div class="eyebrow">YOUR GLOW DASHBOARD</div><h1>Everything in one place 🎀</h1><p>Track the little habits that make you feel good.</p></section>
+<section class="section card"><div class="sectionTitle"><h3>⚙️ Settings</h3><span class="small">Make My Glow yours</span></div><div class="settingRow"><div><b>Theme</b><div class="small">Choose light or dark mode</div></div><div class="themeButtons" style="width:170px"><button id="lightThemeBtn" class="themeBtn" onclick="setTheme('light')">☀️ Light</button><button id="darkThemeBtn" class="themeBtn" onclick="setTheme('dark')">🌙 Dark</button></div></div><div class="settingRow"><div><b>Celebration sound</b><div class="small">Sparkly sound when you complete a task</div></div><button id="soundToggle" class="toggle" onclick="toggleSound()">🔊 On</button></div></section>
+<section class="section stats"><div class="card stat"><span>LEVEL</span><b id="level">3</b><span>Glow Girl</span></div><div class="card stat"><span>XP</span><b id="xpBig">240</b><span>total points</span></div><div class="card stat"><span>STREAK</span><b id="streak">7 🔥</b><span>days</span></div></section>
+<section class="section card"><div class="sectionTitle"><h3>💧 Water tracker</h3><span class="small" id="waterText">0 / 8</span></div><div class="water" id="water"></div></section>
+<section class="section card"><div class="sectionTitle"><h3>🌙 Sleep</h3><span class="small" id="sleepText">8 h</span></div><div class="trackerRow"><span>Last night</span><div class="trackerControls"><button class="roundBtn" onclick="changeSleep(-.5)">−</button><b id="sleepValue">8</b><button class="roundBtn" onclick="changeSleep(.5)">+</button></div></div></section>
+
+<section class="section card journalDailyCard"><div class="sectionTitle"><div><h3>📝 Little Journal</h3><span class="small" id="journalDayLabel">Day 1 of 365</span></div><span class="weekBadge">QUESTION OF THE DAY ✨</span></div><div class="journalQuestion" id="journalQuestion"></div><textarea id="journal" class="journal" placeholder="Write your answer... 💕"></textarea><button class="save" onclick="saveJournal()">Save my answer 💕</button><div class="small" id="journalSaved" style="margin-top:8px"></div></section>
+<section class="section card"><div class="sectionTitle"><h3>🎯 My little goal</h3><span class="small">for today</span></div><input id="goalInput" class="journal" style="min-height:auto" placeholder="z. B. 20 Min spazieren"><button class="save" type="button" onclick="saveGoal()">Save my goal ✨</button><div id="goalSaved" class="small" style="margin-top:8px"></div><div id="goalHistory" class="goalHistory"></div></section>
+<section class="section card"><div class="sectionTitle"><div><h3>🎁 My rewards</h3><span class="small">Neue kleine Belohnungen jede Woche ✨</span></div><span class="weekBadge" id="rewardWeek">THIS WEEK</span></div><div id="rewardsList"></div><div class="small" id="rewardStatus" style="margin-top:10px"></div><div id="rewardHistory" class="rewardHistory small"></div></section>
+</div><div id="memories" class="panel"><section class="hero"><div class="eyebrow">YOUR MEMORIES</div><h1>Little moments, big memories 📸</h1><p>Save photos, videos and little notes about your glow-up journey.</p></section><section class="section card"><div class="memoryToolbar"><button class="btn" type="button" onclick="pickMemoryFiles()">＋ Add photos & videos</button><button class="btn memoryQuickFolder" type="button" onclick="createFolder()">＋ Add folder</button></div><input id="memoryFileInput" type="file" accept="image/*,video/*" multiple hidden onchange="handleMemoryFiles(this.files)"><div class="small" style="margin-top:9px">Your memories stay on this device. 💕</div></section><section class="section card"><div class="sectionTitle"><h3>📁 My folders</h3><span class="small" id="memoryCount"></span></div><div id="folderList" class="folderGrid"></div><div class="folderCreate"><input id="folderInput" placeholder="e.g. Summer 2026"><button class="btn" type="button" onclick="addFolder()">＋ Add folder</button></div></section><section class="section card" id="memoryFolderView" style="display:none"><div class="sectionTitle"><div><button class="btn" type="button" onclick="showAllMemoryFolders()">← Folders</button><h3 id="memoryFolderTitle" style="margin:10px 0 2px">📁 Folder</h3><div class="small" id="memoryFolderCount"></div></div><button class="btn memoryTopEdit" type="button" onclick="toggleMemoryEditMode()">Edit ✨</button></div><div id="memoryCategoryList" class="memoryCategories"></div><div class="folderCreate" style="margin-top:8px"><input id="categoryInput" placeholder="e.g. Thoughts"><button class="btn" type="button" onclick="addMemoryCategory()">＋ Add title</button></div><div class="memoryToolbar" style="margin-top:12px"><button class="btn" type="button" onclick="pickMemoryFiles()">＋ Add photos & videos</button><button class="btn" type="button" onclick="addNoteOnly()">＋ Add note</button></div><div class="memoryGrid" id="memoryGrid"></div></section></div>
+<div id="progress" class="panel"><section class="hero"><div class="eyebrow">YOUR PROGRESS</div><h1>Look how far you've come 🏆</h1><p>Consistency is your superpower.</p></section><section class="section cards"><div class="card"><div class="small">Current streak</div><h2 id="progressStreak">0 🔥</h2><span class="small">days in a row</span></div><div class="card"><div class="small">Glow points</div><h2 id="xp">240</h2><span class="small">XP collected</span></div></section><section class="section card"><div class="sectionTitle"><div><h3>🗓️ Glow Calendar ✨</h3><span class="small">Tap a day to see your little wins.</span></div></div><div class="glowCalendarWrap"><div class="glowCalendarHead"><button type="button" onclick="changeGlowCalendarMonth(-1)" aria-label="Previous month">‹</button><div class="glowCalendarTitle" id="glowCalendarTitle"></div><button type="button" onclick="changeGlowCalendarMonth(1)" aria-label="Next month">›</button></div><div class="glowCalendar" id="glowCalendar"></div><div id="glowDayDetail" class="glowDayDetail"></div></div></section><section class="section card"><div class="sectionTitle"><div><h3>📅 This month</h3><span class="small" id="progressMonthLabel"></span></div></div><div class="monthProgress"><div class="monthStat"><span>Glow tasks</span><b id="monthGlowCount">0</b></div><div class="monthStat"><span>Cleaning tasks</span><b id="monthCleaningCount">0</b></div><div class="monthStat"><span>Days you checked in</span><b id="monthDaysCount">0</b></div><div class="monthStat"><span>XP earned</span><b id="monthXpCount">0</b></div></div><p class="small" style="margin-top:12px">At the end of the month, come here to see your progress. 💕</p></section><section class="section card"><h3>Weekly glow ✨</h3><div class="days"><div class="day done">M</div><div class="day done">T</div><div class="day done">W</div><div class="day">T</div><div class="day">F</div><div class="day">S</div><div class="day">S</div></div></section></div>
+</div>
+<nav class="nav"><button class="active" onclick="show('home',this)"><span>🏠</span>Home</button><button onclick="show('glow',this)"><span>✨</span>Glow</button><button onclick="show('beauty',this)"><span>🎀</span>Beauty</button><button onclick="show('mind',this)"><span>🧠</span>Mind</button><button onclick="show('progress',this)"><span>🏆</span>Progress</button><button onclick="show('memories',this)"><span>📸</span>Memories</button><button onclick="show('more',this)"><span>📋</span>Track</button></nav>
+<script>
+const tasks=[['💧','Drink water','Hydration'],['🧴','Skincare','Morning routine'],['🥣','Eat breakfast','Nourish yourself'],['🧘‍♀️','10 min movement','Move gently'],['🪮','Hair care','Feel pretty'],['🧹','Tidy for 10 min','Fresh space'],['📵','30 min without your phone','30 minutes'],['💗','Do something for you','Tiny joy']];
+const glow=[['📚','Learn for 20–30 minutes','Study, practice or learn something new','Daily'],['🎀','Get ready just for you','Put on an outfit you love','Daily'],['🌷','Do one confidence thing','Write 3 things you like about yourself','Confidence'],['🕯️','Create a cozy moment','Light a candle or make tea','Lifestyle'],['📸','Take a cute photo','Just for yourself','Beauty'],['💌','Give someone love','Send a sweet message','Lifestyle'],['🧴','Do a mini skincare glow','Cleanse + moisturize','Beauty'],['🧘‍♀️','Take 10 minutes for yourself','Breathe, stretch or simply rest','Lifestyle'],['📚','Read for 20 minutes','Get cozy and read a few pages','Lifestyle'],['💗','Write one thing you love about yourself','Be kind to yourself today','Confidence']];
+let glowCategory='Daily';
+const defaultState={tasks:Array(8).fill(false),water:0,sleep:8,journal:'',journalEntries:{},goal:'',mood:'',xp:240,challenge:Array(30).fill(false),lastDay:'',streak:0,redeemed:[],glowDone:{},calendarMarked:{},animIndex:0,customHairSteps:[],theme:'light',soundEnabled:true,memoryFolder:'All Memories',memoryFolders:['All Memories'],weeklyRide:false,weeklyRideKey:'',cleaningTasks:[],cleaningDone:{},xpHistory:{},dailyHistory:{},glowCalendarMonth:0,glowCalendarSelected:''};
+let saved=JSON.parse(localStorage.getItem('myGlowV3')||'null');
+let state=Object.assign({},defaultState,saved||{});
+state.journalEntries=state.journalEntries||{};state.dailyGoals=state.dailyGoals||{};state.dailyHistory=state.dailyHistory||{};state.glowCalendarMonth=Number.isInteger(state.glowCalendarMonth)?state.glowCalendarMonth:0;state.glowCalendarSelected=state.glowCalendarSelected||'';
+state.theme='light';
+state.tasks=(state.tasks||[]).concat(Array(8).fill(false)).slice(0,8);
+state.challenge=(state.challenge||[]).concat(Array(30).fill(false)).slice(0,30);
+state.redeemed=state.redeemed||[];
+state.glowDone=state.glowDone||{};state.calendarMarked=state.calendarMarked||{};
+state.animIndex=Number.isFinite(state.animIndex)?state.animIndex:0;state.memoryFolders=Array.isArray(state.memoryFolders)&&state.memoryFolders.length?state.memoryFolders:['All Memories'];state.memoryFolder=state.memoryFolders.includes(state.memoryFolder)?state.memoryFolder:'All Memories';
+state.customHairSteps=Array.isArray(state.customHairSteps)?state.customHairSteps:[];state.cleaningTasks=Array.isArray(state.cleaningTasks)?state.cleaningTasks:[];state.cleaningDone=state.cleaningDone||{};state.xpHistory=state.xpHistory||{};state.memoryCategories=state.memoryCategories||{};for(const f of state.memoryFolders){if(!Array.isArray(state.memoryCategories[f]))state.memoryCategories[f]=['All','Photo','Videos','Thoughts'];}state.memoryCategory=state.memoryCategory||'All';if(Array.isArray(state.weeklyRide)){state.weeklyRide=[!!state.weeklyRide[0],!!state.weeklyRide[1]];}else{state.weeklyRide=state.weeklyRide===true?[true,false]:[false,false];}state.weeklyRideKey=state.weeklyRideKey||'';
+// Migrate older versions: keep the XP the user had already earned.
+if(saved && saved.xp===0 && !saved.glowDone){state.xp=240+(state.tasks.filter(Boolean).length*20)+(state.challenge.filter(Boolean).length*20);}
+function save(){
+ const key=localDateKey();
+ state.dailyHistory=state.dailyHistory||{};
+ state.dailyHistory[key]={
+   tasksDone:(state.tasks||[]).filter(Boolean).length,
+   glowDone:Object.keys(state.glowDone||{}).filter(k=>k.startsWith(key+'-')).length,
+   cleaningDone:Object.keys(state.cleaningDone||{}).filter(k=>k.startsWith(key+'-')).length,
+   water:Number(state.water||0),sleep:Number(state.sleep||0),mood:state.mood||'',
+   journal:(state.journalEntries||{})[key]||'',goal:(state.dailyGoals||{})[key]||'',
+   xp:Number((state.xpHistory||{})[key]||0)
+ };
+ localStorage.setItem('myGlowV3',JSON.stringify(state));
+}
+function xpTotal(){return Math.max(0,Math.round(state.xp||0));}
+function level(){return Math.max(1,Math.floor(xpTotal()/100)+1)}
+function addXP(amount){state.xp=Math.max(0,(state.xp||0)+amount);const key=new Date().toISOString().slice(0,10);state.xpHistory=state.xpHistory||{};state.xpHistory[key]=(state.xpHistory[key]||0)+Number(amount||0);save();}
+function playSparkleSound(){
+ if(!state.soundEnabled)return;
+ try{
+  const AC=window.AudioContext||window.webkitAudioContext;
+  if(!AC)return;
+  const ctx=new AC();
+  const now=ctx.currentTime;
+  [880,1174,1568].forEach((freq,i)=>{
+   const o=ctx.createOscillator(),g=ctx.createGain();
+   o.type='sine'; o.frequency.value=freq;
+   g.gain.setValueAtTime(0.0001,now+i*0.045);
+   g.gain.exponentialRampToValueAtTime(0.11,now+i*0.06+0.02);
+   g.gain.exponentialRampToValueAtTime(0.0001,now+i*0.06+0.42);
+   o.connect(g);g.connect(ctx.destination);o.start(now+i*0.06);o.stop(now+i*0.06+0.44);
+  });
+  setTimeout(()=>ctx.close(),900);
+ }catch(e){}
+}
+function celebrate(){
+ const layer=document.getElementById('celebrationLayer');
+ const sets=[
+  {cls:'anim-heart',items:['💗','💕','💖','💓']},
+  {cls:'anim-star',items:['⭐','🌟','✨','💫']},
+  {cls:'anim-sparkle',items:['✨','✦','✧','💎']},
+  {cls:'anim-bow',items:['🎀','💗','🎀','💕']},
+  {cls:'anim-petal',items:['🌸','🌷','🌺']}
+ ];
+ const pick=sets[state.animIndex%sets.length]; state.animIndex=(state.animIndex+1)%sets.length; save();
+ playSparkleSound();
+ for(let i=0;i<24;i++){
+  const el=document.createElement('span'); el.className='celebratePiece '+pick.cls; el.textContent=pick.items[i%pick.items.length];
+  const side=Math.random()<.5?-1:1;
+  el.style.setProperty('--x',((Math.random()*1000)-500)+'px');
+  el.style.setProperty('--y',((Math.random()*1000)-500)+'px');
+  el.style.setProperty('--r',((Math.random()*720)-360)+'deg');
+  el.style.left=(5+Math.random()*90)+'%';
+  el.style.top=(5+Math.random()*90)+'%';
+  el.style.fontSize=(15+Math.random()*10)+'px';
+  el.style.animationDelay=(i*55)+'ms';
+  layer.appendChild(el); setTimeout(()=>el.remove(),3100);
+ }
+}
+function setTheme(theme){
+ state.theme=theme; save(); applyTheme();
+}
+function applyTheme(){
+ document.body.classList.toggle('dark',state.theme==='dark');
+ document.body.classList.toggle('light',state.theme!=='dark');
+ const l=document.getElementById('lightThemeBtn'),d=document.getElementById('darkThemeBtn');
+ if(l)l.classList.toggle('active',state.theme!=='dark');
+ if(d)d.classList.toggle('active',state.theme==='dark');
+}
+function toggleSound(){state.soundEnabled=!state.soundEnabled;save();renderSettings();}
+function renderSettings(){
+ const b=document.getElementById('soundToggle'); if(b)b.textContent=state.soundEnabled?'🔊 On':'🔇 Off';
+ applyTheme();
+}
+
+const dailyQuotes=[
+ ['You only live once — remember that. 💕',''],
+ ['Nobody can actually beat you at being you. Focus on yourself. 🎀',''],
+ ['You are allowed to grow at your own pace. 🌷',''],
+ ['Small steps still move you forward. ✨',''],
+ ['Be proud of how far you have come. 🫶',''],
+ ['You do not have to be perfect to be amazing. 💗',''],
+ ['Your future self will thank you for what you do today. 🌸',''],
+ ['“I can do all things through Christ who strengthens me.”','Philippians 4:13'],
+ ['“This is the day the Lord has made; let us rejoice and be glad in it.”','Psalm 118:24'],
+ ['“She is clothed with strength and dignity.”','Proverbs 31:25']
+];
+function renderDailyQuote(){const q=dailyQuotes[Math.floor(Date.now()/86400000)%dailyQuotes.length];const el=document.getElementById('dailyQuote');const src=document.getElementById('dailyQuoteSource');if(el)el.textContent=q[0];if(src)src.textContent=q[1]?q[1]:'Daily reminder';}
+function weekKey(){const d=new Date();const jan=new Date(d.getFullYear(),0,1);return d.getFullYear()+'-'+Math.ceil((((d-jan)/86400000)+jan.getDay()+1)/7);}
+function toggleRide(slot){
+ const k=weekKey();
+ if(state.weeklyRideKey!==k){state.weeklyRide=[false,false];state.weeklyRideKey=k;}
+ if(!Array.isArray(state.weeklyRide))state.weeklyRide=[false,false];
+ slot=Number(slot); if(slot!==0&&slot!==1)return;
+ state.weeklyRide[slot]=!state.weeklyRide[slot];
+ if(state.weeklyRide[slot]){addXP(20);celebrate();}else{addXP(-20);}
+ save();renderRide();render();
+}
+function renderRide(){
+ const k=weekKey();
+ if(state.weeklyRideKey!==k){state.weeklyRide=[false,false];state.weeklyRideKey=k;save();}
+ if(!Array.isArray(state.weeklyRide))state.weeklyRide=[false,false];
+ if(state.weeklyRide.length<2)state.weeklyRide=[!!state.weeklyRide[0],!!state.weeklyRide[1]];
+ const el=document.getElementById('rideTasks');
+ if(el){el.innerHTML=[0,1].map(i=>`<button type="button" class="task weeklyTask ${state.weeklyRide[i]?'done':''}" onclick="toggleRide(${i})"><div class="check">${state.weeklyRide[i]?'✓':'🐴'}</div><div style="text-align:left;flex:1"><div class="taskName">Go horse riding · ${i+1}</div><div class="taskMeta">Ride ${i+1} of 2 this week · +20 XP · tap again to undo</div></div></button>`).join('');}
+}
+function show(id,btn){
+ document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+ const panel=document.getElementById(id);
+ if(panel) panel.classList.add('active');
+ document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
+ if(btn) btn.classList.add('active');
+ window.scrollTo({top:0,behavior:'smooth'});
+}
+function renderExtra(){
+ const j=document.getElementById('journal'); if(j){ const key=localDateKey(); j.value=state.journalEntries[key]||''; state.journal=state.journalEntries[key]||''; } const q=document.getElementById('journalQuestion'); if(q) q.textContent=getJournalQuestion(); const jl=document.getElementById('journalDayLabel'); if(jl) jl.textContent='Day '+journalDayNumber()+' of 365';
+ const g=document.getElementById('goalInput'); if(g) g.value=state.goal||'';
+ const sv=document.getElementById('sleepValue'); if(sv) sv.textContent=state.sleep;
+ const st=document.getElementById('sleepText'); if(st) st.textContent=state.sleep+' h';
+ renderWater();
+ renderChallenge();
+ renderCalendar();
+ renderRide();
+}
+function glowCalendarDateKey(year,month,day){return `${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;}
+function glowCalendarMonthDate(){const now=new Date();return new Date(now.getFullYear(),now.getMonth()+(Number(state.glowCalendarMonth)||0),1);}
+function changeGlowCalendarMonth(delta){state.glowCalendarMonth=(Number(state.glowCalendarMonth)||0)+Number(delta||0);state.glowCalendarSelected='';save();renderProgress();}
+function selectGlowCalendarDay(key){state.glowCalendarSelected=key;save();renderProgress();}
+function renderGlowCalendar(){
+ const el=document.getElementById('glowCalendar');if(!el)return;
+ const base=glowCalendarMonthDate(),year=base.getFullYear(),month=base.getMonth();
+ const nowKey=localDateKey();
+ const first=new Date(year,month,1),days=new Date(year,month+1,0).getDate(),offset=(first.getDay()+6)%7;
+ const heads=['M','D','M','D','F','S','S'];
+ document.getElementById('glowCalendarTitle').textContent=base.toLocaleDateString('de-CH',{month:'long',year:'numeric'});
+ let html=heads.map(x=>`<div class="glowCalHead">${x}</div>`).join('');
+ for(let i=0;i<offset;i++)html+='<div></div>';
+ for(let d=1;d<=days;d++){
+   const key=glowCalendarDateKey(year,month,d),h=state.dailyHistory[key]||{};
+   const has=!!(h.tasksDone||h.glowDone||h.cleaningDone||h.water||h.sleep||h.mood||h.journal||h.goal||h.xp||state.calendarMarked[key]);
+   const cls=`glowCalDay${key===nowKey?' today':''}${has?' hasData':''}${state.glowCalendarSelected===key?' selected':''}`;
+   html+=`<button type="button" class="${cls}" onclick="selectGlowCalendarDay('${key}')">${d}${has?'<span class="glowCalDot"></span>':''}</button>`;
+ }
+ el.innerHTML=html;
+ renderGlowDayDetail();
+}
+function renderGlowDayDetail(){
+ const el=document.getElementById('glowDayDetail');if(!el)return;
+ let key=state.glowCalendarSelected;
+ if(!key){key=localDateKey();state.glowCalendarSelected=key;}
+ const today=localDateKey();
+ let h=state.dailyHistory[key]||{};
+ if(key===today){h={...h,tasksDone:(state.tasks||[]).filter(Boolean).length,glowDone:Object.keys(state.glowDone||{}).filter(k=>k.startsWith(key+'-')).length,cleaningDone:Object.keys(state.cleaningDone||{}).filter(k=>k.startsWith(key+'-')).length,water:Number(state.water||0),sleep:Number(state.sleep||0),mood:state.mood||'',journal:(state.journalEntries||{})[key]||'',goal:(state.dailyGoals||{})[key]||'',xp:Number((state.xpHistory||{})[key]||0)};}
+ const label=new Date(key+'T12:00:00').toLocaleDateString('de-CH',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+ const mood=h.mood||'—';
+ const note=h.journal?`📝 <b>Journal:</b> ${esc(h.journal)}`:'';
+ const goal=h.goal?`🎯 <b>Goal:</b> ${esc(h.goal)}`:'';
+ el.innerHTML=`<h4>✨ ${label}</h4><div class="glowDayStats"><div class="glowDayStat"><b>${Number(h.tasksDone||0)}</b><span>Home tasks</span></div><div class="glowDayStat"><b>${Number(h.glowDone||0)}</b><span>Glow tasks</span></div><div class="glowDayStat"><b>${Number(h.cleaningDone||0)}</b><span>Cleaning</span></div><div class="glowDayStat"><b>${Number(h.xp||0)} XP</b><span>XP earned</span></div><div class="glowDayStat"><b>${Number(h.water||0)} / 8</b><span>Water glasses</span></div><div class="glowDayStat"><b>${Number(h.sleep||0)} h</b><span>Sleep</span></div></div><div class="glowDayNote">💗 <b>Mood:</b> ${esc(mood)}${note?'<br><br>'+note:''}${goal?'<br><br>'+goal:''}${(!note&&!goal)?'<br><span class="glowDayEmpty">No journal or goal saved for this day yet. Your little wins are still yours. 🌷</span>':''}</div>`;
+}
+function renderProgress(){
+ const el=document.getElementById('progressStreak'); if(el) el.textContent=(state.streak||0)+' 🔥';
+ const xpEl=document.getElementById('xp'); if(xpEl) xpEl.textContent=xpTotal();
+ const now=new Date();
+ const prefix=now.toISOString().slice(0,7);
+ let glowCount=0, cleaningCount=0, xpCount=0;
+ Object.keys(state.glowDone||{}).forEach(k=>{if(k.startsWith(prefix+'-')) glowCount++;});
+ Object.keys(state.cleaningDone||{}).forEach(k=>{if(k.startsWith(prefix+'-')) cleaningCount++;});
+ Object.keys(state.xpHistory||{}).forEach(k=>{if(k.startsWith(prefix+'-')) xpCount+=Number(state.xpHistory[k]||0);});
+ const m=document.getElementById('monthGlowCount'); if(m)m.textContent=glowCount;
+ const c=document.getElementById('monthCleaningCount'); if(c)c.textContent=cleaningCount;
+ const x=document.getElementById('monthXpCount'); if(x)x.textContent=xpCount;
+ const d=document.getElementById('monthDaysCount'); if(d){const days=new Set([...Object.keys(state.xpHistory||{}),...Object.keys(state.glowDone||{}).map(k=>k.slice(0,10)),...Object.keys(state.cleaningDone||{}).map(k=>k.slice(0,10))].filter(k=>k.startsWith(prefix))); d.textContent=days.size;}
+ const label=document.getElementById('progressMonthLabel'); if(label) label.textContent=now.toLocaleDateString('de-CH',{month:'long',year:'numeric'});
+ renderGlowCalendar();
+}
+function render(){renderGoalHistory();
+ const el=document.getElementById('tasks');el.innerHTML=tasks.map((t,i)=>`<div class="card task ${state.tasks[i]?'done':''}" onclick="toggle(${i})"><div class="check">${state.tasks[i]?'✓':''}</div><div><div class="taskName">${t[0]} ${t[1]}</div><div class="taskMeta">${t[2]} · +20 XP</div></div></div>`).join('');
+ let n=state.tasks.filter(Boolean).length,p=Math.round(n/tasks.length*100);
+ document.getElementById('bar').style.width=p+'%';document.getElementById('progressText').textContent=`${n} von ${tasks.length} erledigt`;document.getElementById('percent').textContent=p+'%';
+ document.getElementById('xp').textContent=xpTotal();document.getElementById('xpBig').textContent=xpTotal();document.getElementById('level').textContent=level();
+ document.getElementById('streak').textContent=(state.streak||0)+' 🔥';
+ renderRewards();
+}
+function toggle(i){
+ const wasDone=state.tasks[i]; state.tasks[i]=!wasDone;
+ if(state.tasks[i]){addXP(20);updateStreak();celebrate();}else{state.xp=Math.max(0,state.xp-20);save();}
+ render();
+}
+function resetDay(){state.tasks=Array(8).fill(false);save();render();}
+function updateStreak(){const today=new Date().toISOString().slice(0,10);if(state.lastDay!==today){state.streak=(state.streak||0)+1;state.lastDay=today;}}
+const rewardSets=[
+ [{e:'☕',n:'Cozy coffee / tea moment',c:50},{e:'🛁',n:'Long everything shower',c:100},{e:'🎀',n:'Buy yourself something cute',c:250},{e:'✨',n:'Big glow-up treat',c:500}],
+ [{e:'🍓',n:'Make your favourite snack',c:60},{e:'🕯️',n:'Cozy candle + music moment',c:120},{e:'💅',n:'Mini at-home manicure',c:220},{e:'🌷',n:'Fresh flowers for your room',c:450}],
+ [{e:'🧋',n:'Treat yourself to a drink',c:70},{e:'🎬',n:'Movie / comfort-show night',c:140},{e:'🛍️',n:'Little self-care treat',c:280},{e:'💖',n:'Dream glow-up treat',c:550}],
+ [{e:'🥐',n:'Cute breakfast date with yourself',c:60},{e:'🧴',n:'Everything-shower + body-care night',c:130},{e:'📚',n:'Buy a new book',c:300},{e:'🎀',n:'Something from your wishlist',c:600}]
+];
+function weekNumber(d=new Date()){const x=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));const day=x.getUTCDay()||7;x.setUTCDate(x.getUTCDate()+4-day);const y=new Date(Date.UTC(x.getUTCFullYear(),0,1));return Math.ceil((((x-y)/86400000)+1)/7);}
+function currentRewards(){return rewardSets[weekNumber()%rewardSets.length];}
+function renderRewards(){const list=document.getElementById('rewardsList');if(!list)return;const rewards=currentRewards();const week=weekNumber();document.getElementById('rewardWeek').textContent='WEEK '+week;list.innerHTML=rewards.map(r=>`<div class="reward"><span>${r.e} ${r.n}</span><button class="btn" onclick="redeem(${r.c},'${r.n.replace(/'/g,"\'")}')">${r.c} XP</button></div>`).join('');const recent=state.redeemed.slice(-3).reverse();document.getElementById('rewardHistory').innerHTML=recent.length?'Recently unlocked: '+recent.map(x=>`${x.name} · ${x.date}`).join(' · '):'Noch keine Belohnung eingelöst 💕';}
+function renderWater(){const el=document.getElementById('water');el.innerHTML=Array.from({length:8},(_,i)=>`<button aria-label="Wasserglas ${i+1}" class="${i<state.water?'filled':''}" onclick="setWater(${i+1})"><span class="glassIcon"><span class="glassFill"></span></span></button>`).join('');document.getElementById('waterText').textContent=`${state.water} / 8 glasses`;}
+function setWater(n){state.water=n;save();renderWater();}
+function changeSleep(n){state.sleep=Math.max(0,Math.min(14,Math.round((state.sleep+n)*10)/10));save();document.getElementById('sleepValue').textContent=state.sleep;document.getElementById('sleepText').textContent=state.sleep+' h';}
+function localDateKey(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function journalDayNumber(){const d=new Date();const start=new Date(d.getFullYear(),0,1);let n=Math.floor((d-start)/86400000)+1;const leap=new Date(d.getFullYear(),1,29).getMonth()===1;if(leap&&n>59)n--;return Math.min(Math.max(n,1),365);}
+const journalQuestions=["What was the best little moment of your day?","What made you smile today?","What part of today would you happily relive?","What did today teach you about yourself?","What is one thing you want to remember about today?","What felt good about your morning today?","What would make tomorrow morning feel softer?","What is your favourite part of a slow morning?","What morning habit makes you feel most like yourself?","If you could design your perfect morning, what would it include?","What made your evening feel cozy?","What helps you switch off at night?","What is your favourite way to end a day?","What would make your evenings more peaceful?","What is one thought you want to leave behind before sleeping?","What makes your home feel like your safe place?","Which corner of your room do you love most?","What would make your space feel even cozier?","What is a small home task that makes you feel better afterward?","What memory is connected to your home?","What detail in your room makes you happy?","How would you describe your dream bedroom?","What is one thing you would love to change in your room?","What object in your room has the most meaning to you?","What would your room look like in your perfect daydream?","What is something you genuinely like about yourself?","How could you be a little kinder to yourself today?","What compliment would you love to believe about yourself?","When do you feel most comfortable being yourself?","What is one thing your future self will thank you for?","When did you feel confident recently?","What makes you feel pretty and confident?","What is something you can do that you sometimes forget to be proud of?","What would you do if you knew nobody would judge you?","What is one confidence goal you would love to grow into?","What beauty routine makes you feel cared for?","What makes you feel beautiful without makeup?","What is your favourite way to get ready?","Which beauty product feels like a little luxury to you?","What does beauty mean to you personally?","What do you love most about your hair?","What hairstyle makes you feel your best?","What is your favourite hair-care ritual?","What hair look would you love to try someday?","What is one kind thing you could do for your hair today?","What makes your skin-care routine feel relaxing?","What is your favourite skin-care step?","How do you feel after taking time to care for your skin?","What is one small self-care habit your skin would appreciate?","What does a perfect everything-care evening look like for you?","What is something your body did well for you today?","How can you thank your body today?","What movement makes your body feel happy?","What is one thing you want to stop criticizing about your body?","What would body kindness look like for you this week?","What is one healthy choice you are proud of?","What helps you feel physically well?","Which healthy habit feels easiest for you?","What is one health habit you would like to build gently?","What does feeling healthy mean to you?","How do you feel when you have had enough water?","What helps you remember to drink water?","What is your favourite drink besides water?","When during the day do you enjoy a cold glass of water most?","What little habit could make hydration more fun?","How did your sleep affect your mood today?","What helps you relax before bed?","What would your ideal bedtime routine look like?","What makes a bedroom feel perfect for sleep?","What is one thing you could do tonight to rest better?","What meal always feels comforting to you?","What food could you eat again and again?","What is your favourite thing to have for breakfast?","What is a meal that reminds you of someone you love?","If you could have any meal right now, what would it be?","What is something you would love to learn to cook?","Which meal are you most proud of making?","What is your favourite thing about cooking?","Who would you love to cook dinner for?","What would your dream dinner table look like?","What kind of movement makes you feel good?","How do you feel after exercising?","What activity would you like to get better at?","What makes movement feel fun rather than like a chore?","What small movement could you fit into tomorrow?","What do you love most about horse riding?","How do you feel when you are around horses?","What is your favourite horse-riding memory?","What would your perfect riding day look like?","What is one riding goal you would love to achieve?","What is your favourite thing about being outside?","Which place in nature makes you feel peaceful?","What natural sound do you love most?","What season makes you want to spend more time outside?","If you could spend a whole day anywhere in nature, where would you go?","What do you love about rainy days?","What is your favourite thing to do while it rains?","What feeling does rain give you?","What would your perfect rainy-day evening look like?","What song belongs in your rainy-day playlist?","What is your favourite summer memory?","What makes summer feel special to you?","What would your perfect summer day include?","Where would you love to go on a summer trip?","What summer activity always makes you happy?","What do you love about winter?","What is your favourite cozy winter activity?","What food tastes best on a cold day?","What would your dream winter evening look like?","Which winter memory makes you smile?","What do you love about spring?","What feels fresh and new to you right now?","What would you like to grow this spring?","What spring activity makes you happiest?","What colour reminds you of spring?","What do you love about autumn?","What is your favourite autumn comfort?","Which autumn smell do you love?","What would your perfect autumn day look like?","What autumn memory do you want to keep?","What makes someone a really good friend?","Who always makes you laugh?","What is your favourite memory with a friend?","How do you like to show your friends you care?","What friendship quality do you value most?","What is a family moment you treasure?","Who in your family makes you feel understood?","What family tradition do you love?","What is something you learned from your family?","What would your perfect family day look like?","What is one thing you love about your sister?","What is your funniest memory together?","What is something only the two of you understand?","What would make a perfect sister day?","What is one thing you hope you will always do together?","What does love feel like to you?","How do you like to receive affection?","What is a small romantic gesture you love?","What makes a relationship feel safe and healthy?","What kind of love do you want to give more of?","What makes you feel appreciated by a friend?","What is your favourite way to spend time with friends?","What is one friendship lesson you have learned?","How do you know when you can trust someone?","What kind of friend do you want to be?","Which memory instantly makes you smile?","What memory would you love to experience again?","Which childhood memory feels especially precious?","What tiny detail helps you remember a special moment?","What new memory would you love to create this year?","What did you love doing as a child?","What childhood place do you remember clearly?","What would you tell your younger self today?","What childhood food brings back memories?","What part of your younger self do you still carry with you?","What subject did you enjoy most?","What is something school taught you beyond the classroom?","Which school memory makes you laugh?","What study habit helps you most?","What would make learning feel more exciting?","What is something new you learned recently?","What skill would you love to master?","What topic could you talk about for hours?","How do you learn best?","What would you like to understand better this year?","What book has stayed in your mind?","What kind of book always pulls you in?","Where is your favourite place to read?","What book would you recommend to someone you love?","What fictional world would you visit for one day?","Which song always changes your mood?","What song reminds you of a special person?","What kind of music feels most like you?","What song would play during your movie montage?","Which artist would you love to see live?","What movie can you watch again and again?","Which movie character do you relate to?","What is your favourite comfort movie?","What movie scene has stayed with you?","If your life were a movie, what genre would it be?","Which series could you binge forever?","What fictional character would you be friends with?","What series world would you love to visit?","What makes a series feel comforting to you?","What should your next cozy-watch night include?","What creative activity makes you lose track of time?","What would you create if you had a whole free day?","What is something you would love to draw or design?","Where do you get your best creative ideas?","What creative project would make you proud?","What do you enjoy most about drawing?","What is your favourite thing you have ever drawn?","Which colours do you love using?","What would you like to draw next?","What does drawing help you express?","What kind of moment do you love photographing?","Which photo in your gallery makes you happiest?","What makes a photo feel special to you?","What would you love to photograph more often?","If you could freeze one moment today in a photo, which would it be?","Where would you love to travel next?","What is your favourite travel memory?","Do you prefer city trips, nature trips, or beach trips?","Who would you love to travel with?","What would your dream vacation day look like?","What is your favourite place in Switzerland?","Which Swiss place would you love to explore next?","What Swiss food could you never get tired of?","What is a Swiss memory you treasure?","Where in Switzerland would you go for a peaceful weekend?","What is one dream you really want to make real?","What would your dream life feel like?","What dream did you have as a child?","Which dream are you currently working toward?","What would you try if failure were impossible?","What is one goal you are proud of?","What goal feels exciting right now?","What tiny step could move you closer to a goal?","Which goal would make the biggest difference in your life?","How will you celebrate when you reach a goal?","What are you looking forward to?","Where do you hope to be one year from now?","What would your future home feel like?","What kind of person do you want to become?","What would you like your future self to remember about today?","What kind of work would make you happy?","What do you enjoy most about your current work or studies?","What skill would help your future career?","What would your dream workplace feel like?","What achievement would make you proud professionally?","What does financial freedom mean to you?","What is something worth saving for?","What is your favourite way to treat yourself responsibly?","What money habit would you like to improve?","What would you do with a surprise amount of money?","What makes you feel independent?","What is something you can now do for yourself that once felt difficult?","What part of adult life are you enjoying?","What would make you feel even more capable?","What is one decision you are proud of making yourself?","What is the kindest thing someone has done for you?","What small kindness could you give someone today?","How do you feel after helping someone?","Who deserves a little extra kindness from you?","What does kindness toward yourself look like?","What are three little things you appreciate today?","Who are you especially grateful for?","What everyday comfort are you thankful for?","What experience are you grateful you got to have?","What is something you once took for granted that you now appreciate?","What does happiness look like for you?","What tiny thing can instantly lift your mood?","When do you feel most carefree?","What place makes you feel happiest?","What would your perfect happy day include?","What usually helps you when you feel sad?","What do you need most on a difficult day?","Who makes you feel safe when things are hard?","What would you say to a friend feeling the way you feel?","What is one gentle thing you can give yourself today?","What usually makes you feel stressed?","What helps you calm down?","How can you make today a little lighter?","What is one thing you can let go of?","What does a truly relaxing day look like to you?","What does real rest mean to you?","What makes you feel rested rather than just distracted?","When do you find it hardest to slow down?","What would a guilt-free rest day look like?","What is one thing you can say no to so you can rest?","What do you enjoy doing without your phone?","How do you feel after spending less time online?","Which app brings you the most joy?","What would you do with an extra hour without your phone?","When would a phone-free evening feel nicest?","What part of social media inspires you?","What kind of content makes you feel good?","What online habit would you like to change?","Who or what online makes you laugh?","How can you make your feed feel more positive?","What outfit makes you feel amazing?","Which clothing colour feels most like you?","What fashion trend would you love to try?","What is your favourite piece in your wardrobe?","How would you describe your personal style?","What small purchase always feels worth it?","What is something you would love to save up for?","Do you prefer practical things or little treats?","What is the cutest thing you own?","What would your dream shopping day look like?","What makes a moment feel cozy to you?","What is your favourite cozy drink?","Which blanket, scent, or texture do you love most?","What would your perfect cozy evening include?","Where is your favourite cozy spot?","What self-care activity helps you recharge?","What is one self-care habit you want to do more often?","What does your ideal self-care Sunday look like?","Which small ritual makes you feel cared for?","What would you tell yourself on a day when you need extra care?","Which routine makes your day easier?","What part of your morning routine do you enjoy most?","What night routine helps you feel ready for tomorrow?","Which habit would you like to make automatic?","What would your dream daily routine look like?","How do you feel after cleaning your room?","Which cleaning task do you actually enjoy?","What tiny cleaning job would make your space feel better today?","What helps you stay motivated while cleaning?","What would your dream perfectly tidy room look like?","What helps you feel organized?","Which area of your life would you love to organize better?","What planning method works best for you?","What does an organized day look like?","What could you prepare tonight to make tomorrow easier?","What would you do with an extra three hours today?","When do you feel like time moves too quickly?","What activity makes time disappear for you?","What do you want to make more time for?","How would you spend a completely free day?","What is your perfect Saturday?","What makes Sundays feel special?","Do you prefer busy weekends or slow ones?","Who would you love to spend a weekend with?","What is one thing you want to do this weekend?","What counts as an adventure for you?","What is the most spontaneous thing you have done?","What adventure would you love to try?","Who would be fun to have an adventure with?","What would your dream adventure day look like?","When were you brave recently?","What is something you are nervous to try but still want to do?","Who inspires you to be courageous?","What would you do if you felt completely fearless?","What does being brave mean to you?","What mistake taught you something important?","How do you usually talk to yourself after making a mistake?","What would you tell your younger self about mistakes?","What is something you learned the hard way?","How can you turn a recent mistake into a lesson?","How have you changed in the last year?","What part of yourself are you currently growing?","What experience helped you grow?","What would personal growth look like this month?","What old version of yourself are you ready to leave behind?","What boundary makes your life healthier?","When is it hardest for you to say no?","How do you know when you need space?","What is one boundary you would like to strengthen?","What does respecting your own needs look like?","What gives you a feeling of inner peace?","Where do you go when you need quiet?","What sound makes you feel peaceful?","What could you remove from your day to create more peace?","What would a peaceful evening look like?","What gives you hope when life feels uncertain?","Is there a verse, quote, or thought that comforts you?","What are you trusting life with right now?","What does faith mean to you personally?","What reminder helps you keep going?","What quote has stayed with you?","What words would you put on your own motivational poster?","Which sentence would you love to hear today?","What quote describes your current chapter?","What would your future self write as a quote to you?"];
+function getJournalQuestion(){return journalQuestions[journalDayNumber()-1]||journalQuestions[0];}
+function saveJournal(){const value=document.getElementById('journal').value;const key=localDateKey();state.journalEntries[key]=value;state.journal=value;save();document.getElementById('journalSaved').textContent=value.trim()?'Saved for today ✨':'Your answer is empty — you can come back anytime 💕';}
+function renderGoalHistory(){const el=document.getElementById('goalHistory');if(!el)return;const entries=Object.entries(state.dailyGoals||{}).filter(([,v])=>v&&String(v).trim()).sort((a,b)=>b[0].localeCompare(a[0])).slice(0,30);el.innerHTML=entries.length?'<div class="small" style="margin-bottom:6px">📖 Saved goals</div>'+entries.map(([date,goal])=>`<div class="goalHistoryItem"><div class="goalHistoryDate">${new Date(date+'T12:00:00').toLocaleDateString('de-CH',{day:'numeric',month:'long',year:'numeric'})}</div><div class="goalHistoryText">🎯 ${esc(goal)}</div></div>`).join(''):'<div class="small">Your saved daily goals will appear here. 💕</div>'; }
+function saveGoal(){const input=document.getElementById('goalInput');const value=(input?.value||'').trim();const today=localDateKey();state.goal=value;state.dailyGoals=state.dailyGoals||{};if(value)state.dailyGoals[today]=value;else delete state.dailyGoals[today];save();document.getElementById('goalSaved').textContent=value?'Dein Ziel ist gespeichert 🎀':'Dann setzen wir heute kein Ziel — auch das ist okay 💕';renderGoalHistory();}
+const moodMessages={'🥰':'Wie schön, dass du dich heute so gut fühlst! ✨','😊':'Es klingt nach einem schönen Moment für dich. 🌷','😐':'Nicht jeder Tag muss perfekt sein – du bist trotzdem gut genug. 🫶','😔':'Es ist okay, wenn heute nicht alles leicht ist. Sei sanft mit dir. 🌸','😢':'Du musst heute nicht stark sein. Nimm dir Zeit für dich. 🫂','😡':'Deine Gefühle sind erlaubt. Atme kurz durch und gib dir Raum. ❤️','😴':'Du darfst langsamer machen. Dein Körper verdient eine Pause. 🫧'};
+function mood(x){state.mood=x;save();document.getElementById('moodText').textContent=moodMessages[x]||'Wähle kurz, wie du dich gerade fühlst. 🩷';}
+function redeem(cost,name){if(xpTotal()-cost<0){document.getElementById('rewardStatus').textContent='Noch nicht genug XP — du schaffst das! 🌷';return}state.xp-=cost;state.redeemed.push({name,date:new Date().toLocaleDateString('de-CH')});save();document.getElementById('rewardStatus').textContent=`✨ ${name} eingelöst! Viel Freude damit 💕`;render();}
+function renderChallenge(){const el=document.getElementById('days');el.innerHTML=state.challenge.map((done,i)=>`<button type="button" class="day ${done?'done':''}" aria-pressed="${done}" onclick="toggleChallenge(${i})">${i+1}</button>`).join('');const n=state.challenge.filter(Boolean).length;document.getElementById('challengeStatus').textContent=n===30?'30/30 geschafft!! Du bist amazing 🥹🎀':`${n}/30 Tage geschafft · Heute ist Tag ${Math.min(n+1,30)} · +20 XP pro Tag`}
+function toggleChallenge(i){const was=state.challenge[i];state.challenge[i]=!was;if(state.challenge[i]){addXP(20);celebrate();}else{state.xp=Math.max(0,state.xp-20);save();}renderChallenge();render();}
+function renderCalendar(){const el=document.getElementById('calendar');const now=new Date();const year=now.getFullYear(),month=now.getMonth();const first=new Date(year,month,1);const days=new Date(year,month+1,0).getDate();const offset=(first.getDay()+6)%7;const heads=['M','D','M','D','F','S','S'];el.innerHTML=heads.map(x=>`<div class="calHead">${x}</div>`).join('');for(let i=0;i<offset;i++)el.innerHTML+='<div></div>';for(let d=1;d<=days;d++){const key=`${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;let marked=!!state.calendarMarked[key];let cls='calDay'+(d===now.getDate()?' today':'')+(d%3===0?' glow':'')+(marked?' marked':'');el.innerHTML+=`<button type="button" class="${cls}" aria-pressed="${marked}" onclick="toggleCalendarDay('${key}')">${d}</button>`}}
+function toggleCalendarDay(key){state.calendarMarked[key]=!state.calendarMarked[key];save();renderCalendar();}
+const memoryDBName='myGlowMemoriesDB';
+function openMemoryDB(){return new Promise((resolve,reject)=>{const req=indexedDB.open(memoryDBName,1);req.onupgradeneeded=()=>{const db=req.result;if(!db.objectStoreNames.contains('media'))db.createObjectStore('media',{keyPath:'id',autoIncrement:true});};req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error);});}
+function memoryStore(mode){return openMemoryDB().then(db=>db.transaction('media',mode).objectStore('media'));}
+async function getMemories(){const st=await memoryStore('readonly');return new Promise((resolve,reject)=>{const r=st.getAll();r.onsuccess=()=>resolve(r.result||[]);r.onerror=()=>reject(r.error);});}
+async function addMemory(file,folder,category){const st=await memoryStore('readwrite');return new Promise((resolve,reject)=>{const r=st.add({name:file.name,type:file.type,blob:file,folder,category:category||'All',created:Date.now(),note:''});r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error);});}
+async function addNoteMemory(folder,category,note){const st=await memoryStore('readwrite');return new Promise((resolve,reject)=>{const r=st.add({name:'',type:'note',blob:null,folder,category:category||'All',created:Date.now(),note});r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error);});}
+async function updateMemory(id,patch){const st=await memoryStore('readwrite');return new Promise((resolve,reject)=>{const g=st.get(id);g.onsuccess=()=>{const item=g.result;if(!item){resolve();return;}Object.assign(item,patch);const r=st.put(item);r.onsuccess=()=>resolve();r.onerror=()=>reject(r.error);};g.onerror=()=>reject(g.error);});}
+async function deleteMemory(id){const st=await memoryStore('readwrite');return new Promise((resolve,reject)=>{const r=st.delete(id);r.onsuccess=()=>resolve();r.onerror=()=>reject(r.error);});}
+function esc(v){return String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));}
+function pickMemoryFiles(){document.getElementById('memoryFileInput').click();}
+function ensureMemoryCategories(folder){state.memoryCategories=state.memoryCategories||{};if(!Array.isArray(state.memoryCategories[folder])||!state.memoryCategories[folder].length)state.memoryCategories[folder]=['All','Photo','Videos','Thoughts'];return state.memoryCategories[folder];}
+function currentCategory(){return state.memoryCategory||'All';}
+async function handleMemoryFiles(files){if(!files||!files.length)return;const folder=state.memoryFolder||'All Memories';const selected=currentCategory();for(const file of Array.from(files)){if(!file.type.startsWith('image/')&&!file.type.startsWith('video/'))continue;let category;if(selected==='Photo'&&file.type.startsWith('image/'))category='Photo';else if(selected==='Videos'&&file.type.startsWith('video/'))category='Videos';else if(selected!=='All'&&selected!=='Photo'&&selected!=='Videos'&&selected!=='Thoughts')category=selected;else if(file.type.startsWith('image/'))category='Photo';else category='Videos';await addMemory(file,folder,category);}document.getElementById('memoryFileInput').value='';save();await renderMemoryCategories();await renderMemories();renderMemoryFolders();}
+function addFolder(){const input=document.getElementById('folderInput');const name=(input.value||'').trim();if(!name)return;if(!state.memoryFolders.includes(name))state.memoryFolders.push(name);state.memoryFolder=name;state.memoryCategories=state.memoryCategories||{};state.memoryCategories[name]=['All','Photo','Videos','Thoughts'];state.memoryCategory='All';input.value='';save();renderMemoryFolders();showMemoryFolder(name);}
+function createFolder(){const input=document.getElementById('folderInput');input.focus();input.scrollIntoView({behavior:'smooth',block:'center'});}
+function selectMemoryFolder(folder){state.memoryFolder=folder;state.memoryCategory='All';save();showMemoryFolder(folder);}
+function showAllMemoryFolders(){document.getElementById('memoryFolderView').style.display='none';document.getElementById('folderList').closest('.card').style.display='block';renderMemoryFolders();}
+function showMemoryFolder(folder){state.memoryFolder=folder;state.memoryCategory='All';save();document.getElementById('folderList').closest('.card').style.display='none';document.getElementById('memoryFolderView').style.display='block';renderMemoryCategories();renderMemories();window.scrollTo({top:0,behavior:'smooth'});}
+function renderMemoryFolders(){const el=document.getElementById('folderList');if(!el)return;getMemories().then(all=>{el.innerHTML='';state.memoryFolders.forEach(f=>{const items=all.filter(x=>x.folder===f).sort((a,b)=>b.created-a.created);const latest=items.find(x=>x.type!=='note');const tile=document.createElement('button');tile.type='button';tile.className='folderTile';tile.onclick=()=>selectMemoryFolder(f);const cover=latest?`<div class="folderCover"><img src="${URL.createObjectURL(latest.blob)}" alt=""></div>`:'<div class="folderCover"><div class="folderCoverPlaceholder">📁💕</div></div>';tile.innerHTML=cover+`<div class="folderTileBody"><div class="folderTileName">${f==='All Memories'?'✨ ':''}${esc(f)}</div><div class="folderTileCount">${items.length} ${items.length===1?'save':'saves'}</div></div>`;el.appendChild(tile);});document.getElementById('memoryCount').textContent=`${state.memoryFolders.length} ${state.memoryFolders.length===1?'folder':'folders'}`;});}
+function renderMemoryCategories(){
+ const el=document.getElementById('memoryCategoryList');if(!el)return;
+ const cats=ensureMemoryCategories(state.memoryFolder);
+ el.innerHTML='';
+ cats.forEach(c=>{
+   const b=document.createElement('button');
+   b.type='button'; b.className='memoryCategory'+(currentCategory()===c?' active':''); b.textContent=c;
+   b.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();selectMemoryCategory(c);});
+   el.appendChild(b);
+ });
+ document.getElementById('memoryFolderTitle').textContent='📁 '+state.memoryFolder;
+}
+function selectMemoryCategory(category){state.memoryCategory=category;save();renderMemoryCategories();renderMemories();}
+function addMemoryCategory(){const input=document.getElementById('categoryInput');const name=(input.value||'').trim();if(!name)return;const cats=ensureMemoryCategories(state.memoryFolder);if(!cats.includes(name))cats.push(name);state.memoryCategory=name;input.value='';save();renderMemoryCategories();renderMemories();}
+let memoryNoteModalMode='add';let memoryNoteEditId=null;
+function openMemoryNoteModal(mode='add',id=null){memoryNoteModalMode=mode;memoryNoteEditId=id;const modal=document.getElementById('memoryNoteModal');const input=document.getElementById('memoryNoteInput');const title=document.getElementById('memoryNoteModalTitle');if(!modal||!input)return;if(mode==='edit'&&id){getMemoryById(id).then(item=>{input.value=item?.note||'';title.textContent='✏️ Edit note';modal.classList.add('active');modal.setAttribute('aria-hidden','false');setTimeout(()=>input.focus(),50);});}else{input.value='';title.textContent='💭 Add a note';modal.classList.add('active');modal.setAttribute('aria-hidden','false');setTimeout(()=>input.focus(),50);}}
+function closeMemoryNoteModal(){const modal=document.getElementById('memoryNoteModal');if(modal){modal.classList.remove('active');modal.setAttribute('aria-hidden','true');}}
+async function saveMemoryNoteModal(){const input=document.getElementById('memoryNoteInput');const note=(input?.value||'').trim();if(!note){input?.focus();return;}if(memoryNoteModalMode==='edit'&&memoryNoteEditId!=null){await updateMemory(memoryNoteEditId,{note});}else{await addNoteMemory(state.memoryFolder,currentCategory(),note);}closeMemoryNoteModal();await renderMemories();renderMemoryFolders();}
+async function addNoteOnly(){openMemoryNoteModal('add');}
+function memoryHasMedia(item){return item && item.type!=='note' && item.blob;}
+function memoryMatchesCategory(item){return currentCategory()==='All'||(item.category||'All')===currentCategory();}
+async function videoPosterDataUrl(blob){
+  try{
+    const url=URL.createObjectURL(blob);
+    const video=document.createElement('video');
+    video.muted=true; video.playsInline=true; video.preload='auto'; video.src=url;
+    await new Promise((resolve,reject)=>{
+      const done=()=>resolve();
+      video.addEventListener('loadeddata',done,{once:true});
+      video.addEventListener('error',()=>reject(new Error('video load failed')),{once:true});
+      setTimeout(done,1800);
+    });
+    try{ video.currentTime=0; await new Promise(r=>{let f=()=>{video.removeEventListener('seeked',f);r();};video.addEventListener('seeked',f,{once:true});setTimeout(r,700);}); }catch(e){}
+    const canvas=document.createElement('canvas');
+    canvas.width=video.videoWidth||640; canvas.height=video.videoHeight||360;
+    const ctx=canvas.getContext('2d'); ctx.drawImage(video,0,0,canvas.width,canvas.height);
+    const out=canvas.toDataURL('image/jpeg',0.82); URL.revokeObjectURL(url); return out;
+  }catch(e){ return ''; }
+}
+
+async function renderMemories(){
+ const grid=document.getElementById('memoryGrid');if(!grid)return;
+ renderMemoryCategories();
+ const all=await getMemories();
+ const folder=state.memoryFolder||'All Memories';
+ const items=all.filter(x=>x.folder===folder&&memoryMatchesCategory(x)).sort((a,b)=>b.created-a.created);
+ document.getElementById('memoryFolderCount').textContent=`${items.length} ${items.length===1?'save':'saves'} · ${currentCategory()}`;
+ grid.innerHTML='';
+ if(!items.length){grid.innerHTML='<div class="card memoryEmpty" style="grid-column:1/-1">Nothing here yet. Add a photo, video or thought. 💕</div>';return;}
+ for(const item of items){
+   const card=document.createElement('article');
+   card.className='card memoryCard';
+   card.style.cursor='pointer';
+   const date=new Date(item.created).toLocaleDateString('de-CH');
+   if(item.type==='note'){
+     card.classList.add('noteOnlyCard');
+     card.innerHTML=`<div><div class="small">💭 Thought</div><div class="noteOnlyText">${esc(item.note||'')}</div></div><div class="memoryEditMode"><button class="btn" type="button" data-edit="1">Edit ✨</button><button class="btn" type="button" data-delete="1">Delete</button></div>`;
+   }else{
+     const url=URL.createObjectURL(item.blob);const isVideo=item.type.startsWith('video/');
+     let media;if(isVideo){ const poster=await videoPosterDataUrl(item.blob); media=poster?`<video class="memoryMedia" src="${url}" poster="${poster}" muted playsinline preload="metadata"></video>`:`<video class="memoryMedia" src="${url}" muted playsinline preload="auto"></video>`; }else{ media=`<img class="memoryMedia" src="${url}" alt="">`; }
+     if(item.note)card.classList.add('memoryWithNote');
+     card.innerHTML=`<div>${media}</div><div class="memoryBody">${item.note?`<div class="memoryNoteDisplay">${esc(item.note)}</div>`:''}<div class="memoryDateBox">${date}</div><div class="memoryEditMode" style="margin-top:7px"><button class="btn" type="button" data-edit="1">Edit ✨</button><button class="btn" type="button" data-delete="1">Delete</button></div></div>`;
+   }
+   card.addEventListener('click',()=>{if(card.classList.contains('editing'))return;openMemoryViewer(item.id);});
+   const edit=card.querySelector('[data-edit]'); if(edit)edit.addEventListener('pointerup',e=>{e.preventDefault();e.stopPropagation();openMemoryEdit(item.id);});
+   const del=card.querySelector('[data-delete]'); if(del)del.addEventListener('pointerup',e=>{e.preventDefault();e.stopPropagation();deleteMemoryFromEdit(item.id);});
+   grid.appendChild(card);
+ }
+}
+function toggleMemoryEditMode(){const cards=document.querySelectorAll('.memoryCard');const modes=document.querySelectorAll('.memoryEditMode');const willShow=Array.from(modes).some(x=>!x.classList.contains('active'));modes.forEach(x=>x.classList.toggle('active',willShow));cards.forEach(x=>x.classList.toggle('editing',willShow));const btn=document.querySelector('.memoryTopEdit');if(btn)btn.textContent=willShow?'Done ✓':'Edit ✨';}
+async function deleteMemoryFromEdit(id){if(!confirm('Delete this memory from My Glow?'))return;await deleteMemory(id);await renderMemories();renderMemoryFolders();}
+async function getMemoryById(id){const all=await getMemories();return all.find(x=>x.id===id)||null;}
+async function openMemoryEdit(id){openMemoryNoteModal('edit',id);}
+async function openMemoryViewer(id){const item=await getMemoryById(id);if(!item)return;let overlay=document.getElementById('memoryViewer');if(!overlay){overlay=document.createElement('div');overlay.id='memoryViewer';overlay.className='memoryLargeOverlay';document.body.appendChild(overlay);}const date=new Date(item.created).toLocaleDateString('de-CH');if(item.type==='note'){overlay.innerHTML=`<div class="memoryLargeBox"><button class="memoryClose" onclick="closeMemoryViewer()">×</button><div class="small">💭 Thought · ${date}</div><div class="memoryLargeNote">${esc(item.note||'')}</div></div>`;}else{const url=URL.createObjectURL(item.blob);const media=item.type.startsWith('video/')?`<video class="memoryLargeMedia" src="${url}" controls autoplay playsinline></video>`:`<img class="memoryLargeMedia" src="${url}" alt="">`;overlay.innerHTML=`<div class="memoryLargeBox"><button class="memoryClose" onclick="closeMemoryViewer()">×</button>${media}${item.note?`<div class="memoryLargeNote">${esc(item.note)}</div>`:''}<div class="memoryMeta" style="margin-top:8px">${date}</div></div>`;}overlay.style.display='flex';}
+function closeMemoryViewer(){const overlay=document.getElementById('memoryViewer');if(overlay)overlay.remove();}
+async function removeMemory(id){if(!confirm('Delete this memory from My Glow?'))return;await deleteMemory(id);await renderMemories();renderMemoryFolders();}
+function cleaningDateKey(taskId,date=new Date()){return date.toISOString().slice(0,10)+'-'+taskId;}
+function cleaningIsDue(task){const day=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][new Date().getDay()];return task.frequency==='Daily'||task.day==='Every day'||task.day===day||task.frequency==='One-time';}
+function renderCleaningPlan(){const el=document.getElementById('cleaningPlan');if(!el)return;const today=new Date().toISOString().slice(0,10);if(!state.cleaningTasks.length){el.innerHTML='<div class="small">No cleaning tasks yet. Add your first one. 🫧</div>';return;}el.innerHTML=state.cleaningTasks.map(t=>{const key=today+'-'+t.id;const done=!!state.cleaningDone[key];return `<div class="cleaningItem ${done?'done':''}"><button type="button" class="cleaningCheck" onclick="toggleCleaningTask('${t.id}')">${done?'✓':''}</button><div class="cleaningInfo"><div class="cleaningName">${esc(t.name)}</div><div class="cleaningMeta">${esc(t.day)} · ${esc(t.frequency)}</div></div><div class="cleaningActions"><button type="button" onclick="editCleaningTask('${t.id}')">Edit</button><button type="button" onclick="deleteCleaningTask('${t.id}')">×</button></div></div>`;}).join('');}
+function openCleaningForm(id){
+ const form=document.getElementById('cleaningFormGlow')||document.getElementById('cleaningForm');
+ if(!form)return;form.style.display='block';form.dataset.editId=id||'';
+ const t=id&&state.cleaningTasks.find(x=>x.id===id);
+ const name=document.getElementById('cleaningNameGlow')||document.getElementById('cleaningName');
+ const day=document.getElementById('cleaningDayGlow')||document.getElementById('cleaningDay');
+ const freq=document.getElementById('cleaningFrequencyGlow')||document.getElementById('cleaningFrequency');
+ if(name)name.value=t?.name||'';if(day)day.value=t?.day||'Every day';if(freq)freq.value=t?.frequency||'Weekly';
+ if(name)name.focus();
+}
+function closeCleaningFormGlow(){const form=document.getElementById('cleaningFormGlow');if(form){form.style.display='none';form.dataset.editId='';}}
+function saveCleaningTaskGlow(){const form=document.getElementById('cleaningFormGlow');if(!form)return;const name=document.getElementById('cleaningNameGlow').value.trim();if(!name)return;const id=form.dataset.editId||('c'+Date.now());const day=document.getElementById('cleaningDayGlow').value;const frequency=document.getElementById('cleaningFrequencyGlow').value;const existing=state.cleaningTasks.find(x=>x.id===id);if(existing){existing.name=name;existing.day=day;existing.frequency=frequency;}else state.cleaningTasks.push({id,name,day,frequency});save();closeCleaningFormGlow();renderCleaningGlow();renderProgress();}
+function renderCleaningGlow(){
+ const el=document.getElementById('glowTasks');
+ if(!el)return;
+ const today=new Date().toISOString().slice(0,10);
+ const tasks=Array.isArray(state.cleaningTasks)?state.cleaningTasks:[];
+ let html=`<div class="cleaningGlowHeader"><div><div class="taskName">🧹 My Cleaning</div><div class="taskMeta">Keep your space fresh & cozy. 💕</div></div><button type="button" class="save" onclick="openCleaningFormGlow()">＋ Add task</button></div>`;
+ if(!tasks.length){html+=`<div class="card task cleaningGlowEmpty" style="text-align:left"><div class="check">🫧</div><div><div class="taskName">No cleaning tasks yet</div><div class="taskMeta">Tap + Add task to create your first one. ✨</div></div></div>`;el.innerHTML=html;return;}
+ html+=`<div class="cleaningGlowList">`+tasks.map(t=>{
+   const key=today+'-'+t.id; const done=!!state.cleaningDone[key];
+   return `<div class="card task cleaningGlowItem ${done?'done':''}" data-cleaning-id="${String(t.id).replace(/&/g,'&amp;').replace(/"/g,'&quot;')}" ><div class="check">${done?'✓':'🧹'}</div><div style="text-align:left;flex:1"><div class="taskName">${esc(t.name)}</div><div class="taskMeta">${esc(t.day)} · ${esc(t.frequency)}</div></div><span class="cleaningInlineActions"><button type="button" class="cleaningMini" data-action="edit" data-id="${String(t.id).replace(/&/g,'&amp;').replace(/"/g,'&quot;')}">Edit</button><button type="button" class="cleaningMini" data-action="delete" data-id="${String(t.id).replace(/&/g,'&amp;').replace(/"/g,'&quot;')}">×</button></span></div>`;
+ }).join('')+`</div>`;
+ html+=`<div id="cleaningFormGlow" class="card cleaningGlowForm" style="display:none"><div class="taskName">🧹 ${'Edit cleaning task'}</div><input id="cleaningNameGlow" class="journal" style="min-height:auto;margin-top:9px" placeholder="e.g. Vacuum my room"><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px"><select id="cleaningDayGlow" class="cleaningSelect"><option>Every day</option><option>Monday</option><option>Tuesday</option><option>Wednesday</option><option>Thursday</option><option>Friday</option><option>Saturday</option><option>Sunday</option></select><select id="cleaningFrequencyGlow" class="cleaningSelect"><option>Weekly</option><option>Daily</option><option>One-time</option></select></div><div style="display:flex;gap:8px;margin-top:9px"><button type="button" class="save" onclick="saveCleaningTaskGlow()">Save 💕</button><button type="button" class="btn" onclick="closeCleaningFormGlow()">Cancel</button></div></div>`;
+ el.innerHTML=html;
+}
+function toggleCleaningTask(id){
+ const key=new Date().toISOString().slice(0,10)+'-'+id;
+ if(state.cleaningDone[key]){delete state.cleaningDone[key];state.xp=Math.max(0,state.xp-10);}else{state.cleaningDone[key]=true;state.xp=(state.xp||0)+10;celebrate();}
+ save();renderCleaningGlow();renderProgress();render();
+}
+function openCleaningFormGlow(id){
+ const form=document.getElementById('cleaningFormGlow');if(!form)return;form.style.display='block';form.dataset.editId=id||'';
+ const t=id&&state.cleaningTasks.find(x=>x.id===id);const name=document.getElementById('cleaningNameGlow');const day=document.getElementById('cleaningDayGlow');const freq=document.getElementById('cleaningFrequencyGlow');
+ name.value=t?.name||'';day.value=t?.day||'Every day';freq.value=t?.frequency||'Weekly';name.focus();form.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function deleteCleaningTask(id){if(!confirm('Delete this cleaning task?'))return;state.cleaningTasks=state.cleaningTasks.filter(x=>x.id!==id);for(const k of Object.keys(state.cleaningDone||{})){if(k.endsWith('-'+id))delete state.cleaningDone[k];}save();renderCleaningGlow();renderProgress();}
+
+function renderGlow(){
+ const el=document.getElementById('glowTasks');
+ if(glowCategory==='Cleaning'){renderCleaningGlow();return;}
+ const list=glow.filter(t=>glowCategory==='Daily'||t[3]===glowCategory);const todayKey=new Date().toISOString().slice(0,10);el.innerHTML=list.map((t,i)=>{const key=todayKey+'-'+glowCategory+'-'+t[1];const done=!!state.glowDone[key];return `<button type="button" class="card task ${done?'done':''}" onclick="completeGlow(${i})"><div class="check">${done?'✓':t[0]}</div><div style="text-align:left"><div class="taskName">${t[1]}</div><div class="taskMeta">${t[2]} · +10 XP</div></div></button>`}).join('');
+}
+function completeGlow(index){const list=glow.filter(t=>glowCategory==='Daily'||t[3]===glowCategory);const t=list[index];if(!t)return;const key=new Date().toISOString().slice(0,10)+'-'+glowCategory+'-'+t[1];const done=!!state.glowDone[key];if(done){delete state.glowDone[key];state.xp=Math.max(0,state.xp-10);save();renderGlow();render();return;}state.glowDone[key]=true;addXP(10);celebrate();renderGlow();render();}
+function setGlowCategory(cat,btn){glowCategory=cat;document.querySelectorAll('#glow .pill').forEach(x=>x.classList.remove('active'));btn.classList.add('active');renderGlow();}
+function startCurlRoutine(){const steps=state.customHairSteps.length?state.customHairSteps:['Refresh your curls with a little water 💦','Apply your leave-in conditioner','Apply your curl cream or gel','Scrunch your curls gently','Let them air-dry or use a diffuser'];startRoutine('Hair care · My curly hair routine',steps);showCurlEditor();}
+function showCurlEditor(){const box=document.getElementById('routineBox');box.style.display='block';box.innerHTML=`<h3 style="margin-top:0">🎀 My own curly hair routine</h3><p class="small">Füge deine eigenen Schritte hinzu. Sie werden auf deinem iPhone gespeichert. 💕</p><div id="customSteps">${state.customHairSteps.map((x,i)=>`<div class="routine"><span>${i+1}. ${x}</span><button type="button" class="btn" onclick="removeCurlStep(${i})">×</button></div>`).join('')}</div><input id="curlStepInput" class="journal" style="min-height:auto;margin-top:10px" placeholder="z. B. Leave-in Conditioner"><button type="button" class="save" onclick="addCurlStep()">+ Add step 🎀</button><button type="button" class="save" style="margin-top:7px;background:var(--pink)" onclick="saveCurlRoutine()">Save my routine 💕</button>`;}
+function addCurlStep(){const input=document.getElementById('curlStepInput');const value=input&&input.value.trim();if(!value)return;state.customHairSteps.push(value);save();showCurlEditor();}
+function removeCurlStep(i){state.customHairSteps.splice(i,1);save();showCurlEditor();}
+function saveCurlRoutine(){save();startRoutine('Hair care · My curly hair routine',state.customHairSteps.length?state.customHairSteps:['Refresh your curls with a little water 💦','Apply your leave-in conditioner','Apply your curl cream or gel','Scrunch your curls gently','Let them air-dry or use a diffuser']);}
+function startRoutine(name,steps){const box=document.getElementById('routineBox');box.style.display='block';box.innerHTML=`<h3 style="margin-top:0">${name} ✨</h3><p class="small">Mach jeden Schritt in deinem Tempo. Tippe jeden Schritt an, wenn du ihn geschafft hast. 💕</p>${steps.map((x,i)=>`<div class="task routineStep subroutineStep" style="padding:11px 0;cursor:pointer" onclick="this.classList.toggle('done');this.querySelector('.check').textContent=this.classList.contains('done')?'✓':''"><div class="check"></div><div class="taskName">${i+1}. ${x}</div></div>`).join('')}<button class="save" onclick="document.getElementById('routineBox').style.display='none'">Fertig 💕</button>`;box.scrollIntoView({behavior:'smooth',block:'center'});}
+document.addEventListener('click',function(e){
+ const target=e.target;
+ if(!(target instanceof Element)) return;
+ const cat=target.closest('[data-glow-category]');
+ if(cat && cat.id==='cleaningCategoryBtn'){e.preventDefault();e.stopPropagation();setGlowCategory('Cleaning',cat);return;}
+ const mini=target.closest('.cleaningMini');
+ if(mini){e.preventDefault();e.stopPropagation();const action=mini.dataset.action;const id=mini.dataset.id;if(action==='edit')openCleaningFormGlow(id);if(action==='delete')deleteCleaningTask(id);return;}
+ const item=target.closest('.cleaningGlowItem');
+ if(item){e.preventDefault();e.stopPropagation();const id=item.dataset.cleaningId;if(id)toggleCleaningTask(id);}
+});
+renderGlow();
+render();renderExtra();renderCleaningPlan();renderProgress();renderSettings();renderMemoryFolders();renderMemories();
+
+const defaultWorkoutData = {
+  soft: {
+    title:'Soft Glow',
+    desc:'Gentle full-body movement for a soft glow. 🌷',
+    exercises:[
+      {name:'Warm up',amount:'',time:'5 min',done:false},
+      {name:'Running',amount:'',time:'10 min',done:false},
+      {name:'Squats',amount:'15 reps',time:'',done:false},
+      {name:'Plank',amount:'',time:'30 sec',done:false},
+      {name:'Sit-ups',amount:'12 reps',time:'',done:false},
+      {name:'Bicycle Crunches',amount:'12 reps',time:'',done:false},
+      {name:'Mountain Climbers',amount:'12 reps',time:'',done:false},
+      {name:'Cool down',amount:'',time:'5 min',done:false}
+    ]
+  },
+  lower: {
+    title:'Lower Body Glow',
+    desc:'A lower-body focused routine you can customize. 🍑',
+    exercises:[
+      {name:'Warm up',amount:'',time:'5 min',done:false},
+      {name:'Running',amount:'',time:'8 min',done:false},
+      {name:'Squats',amount:'15 reps',time:'',done:false},
+      {name:'Lunges',amount:'10 reps / side',time:'',done:false},
+      {name:'Glute Bridges',amount:'15 reps',time:'',done:false},
+      {name:'Cool down',amount:'',time:'5 min',done:false}
+    ]
+  },
+  full: {
+    title:'Full Body Glow',
+    desc:'Your all-round home workout — edit it however you like. ✨',
+    exercises:[
+      {name:'Warm up',amount:'',time:'5 min',done:false},
+      {name:'Running',amount:'',time:'10 min',done:false},
+      {name:'Squats',amount:'15 reps',time:'',done:false},
+      {name:'Plank',amount:'',time:'30 sec',done:false},
+      {name:'Sit-ups',amount:'12 reps',time:'',done:false},
+      {name:'Bicycle Crunches',amount:'12 reps',time:'',done:false},
+      {name:'Mountain Climbers',amount:'12 reps',time:'',done:false},
+      {name:'Cool down',amount:'',time:'5 min',done:false}
+    ]
+  }
+};
+
+state.workouts = state.workouts || JSON.parse(JSON.stringify(defaultWorkoutData));
+state.selectedWorkout = state.selectedWorkout || 'soft';
+
+
+function ensureWorkouts(){
+  for(const key of ['soft','lower','full']){
+    if(!state.workouts[key]) state.workouts[key]=JSON.parse(JSON.stringify(defaultWorkoutData[key]));
+    state.workouts[key].exercises = Array.isArray(state.workouts[key].exercises) ? state.workouts[key].exercises : [];
+    if(!state.workouts[key].exercises.some(x => String(x.name||'').toLowerCase()==='warm up')) state.workouts[key].exercises.unshift({name:'Warm up',amount:'',time:'5 min',done:false});
+    if(!state.workouts[key].exercises.some(x => String(x.name||'').toLowerCase()==='cool down')) state.workouts[key].exercises.push({name:'Cool down',amount:'',time:'5 min',done:false});
+  }
+}
+function toggleWorkoutOptions(){ const el=document.getElementById('workoutOptions'); if(el) el.classList.toggle('hidden'); }
+function renderWorkout(){
+  ensureWorkouts();
+  renderWorkoutExercises();
+  renderWorkoutEdit();
+}
+function selectWorkout(key,btn){
+  state.selectedWorkout=key; save();
+  document.getElementById('workoutActiveView')?.classList.add('hidden');
+  document.getElementById('workoutEditView')?.classList.add('hidden');
+  document.getElementById('workoutStartView')?.classList.remove('hidden');
+  document.getElementById('workoutOptions')?.classList.add('hidden');
+  renderWorkout();
+}
+function startSpecificWorkout(key){
+  state.selectedWorkout=key;
+  save();
+  startWorkout();
+}
+function startWorkout(){
+  ensureWorkouts();
+  document.getElementById('workoutStartView')?.classList.add('hidden');
+  document.getElementById('workoutActiveView')?.classList.remove('hidden');
+  document.getElementById('workoutEditView')?.classList.add('hidden');
+  document.getElementById('workoutOptions')?.classList.add('hidden');
+  const box=document.getElementById('routineBox');
+  if(box) box.style.display='block';
+  renderWorkoutRoutine();
+}
+function renderWorkoutRoutine(){
+  ensureWorkouts();
+  const box=document.getElementById('routineBox');
+  if(!box) return;
+  const data=state.workouts[state.selectedWorkout];
+  box.style.display='block';
+  box.innerHTML=`<button type="button" class="wide workoutBackBtn" onclick="exitWorkout()">← Back to workouts</button><h3 style="margin-top:14px">${escapeHtmlWorkout(data.title)} ✨</h3><p class="small">Mach jeden Schritt in deinem Tempo. Tippe Warm up oder Cool down an, um die Übungen zu öffnen. 💕</p>${data.exercises.map((e,i)=>{
+    const special=!!workoutSubroutines[e.name];
+    const meta=[e.amount,e.time].filter(Boolean).join(' · ');
+    const action = special ? `openWorkoutSubroutine(${JSON.stringify(e.name)})` : `toggleWorkoutExercise(${i})`;
+    return `<div class="task routineStep ${e.done?'done':''}" style="padding:11px 0" onclick="${action}"><div class="check">${e.done?'✓':''}</div><div><div class="taskName">${i+1}. ${escapeHtmlWorkout(e.name)}</div><div class="taskMeta">${escapeHtmlWorkout(meta || (special?'Tap to open tasks':'Tap when finished'))}</div></div></div>`;
+  }).join('')}<button class="save" onclick="finishWorkout()">Finish workout 💕</button>`;
+  box.scrollIntoView({behavior:'smooth',block:'center'});
+}
+function exitWorkout(){
+  const rb=document.getElementById('routineBox'); if(rb) rb.style.display='none';
+  document.getElementById('workoutActiveView')?.classList.add('hidden');
+  document.getElementById('workoutStartView')?.classList.remove('hidden');
+  document.getElementById('workoutOptions')?.classList.add('hidden');
+  renderWorkout();
+}
+function finishWorkout(){
+  const rb=document.getElementById('routineBox'); if(rb) rb.style.display='none';
+  const ex=state.workouts[state.selectedWorkout].exercises;
+  if(ex.length && ex.every(x=>x.done)){
+    if(typeof addXP==='function') addXP(20);
+    if(typeof celebrate==='function') celebrate();
+  }
+  exitWorkout();
+}
+const workoutSubroutines = {
+  'Warm up': [
+    'March in place 🚶‍♀️ · 1 min',
+    'Arm circles 💪 · 30 sec',
+    'Leg swings 🦵 · 30 sec each side',
+    'Gentle side steps ↔️ · 1 min',
+    'Easy stretching 🧘‍♀️ · 1 min'
+  ],
+  'Cool down': [
+    "Child's pose 🧘‍♀️",
+    'Gentle forward stretch 🌷',
+    'Seated leg stretch 🦵',
+    'Deep, relaxed breathing 🌬️'
+  ]
+};
+function openWorkoutSubroutine(name){
+  const steps=workoutSubroutines[name];
+  if(!steps) return;
+  const box=document.getElementById('routineBox');
+  if(!box) return;
+  box.style.display='block';
+  box.innerHTML=`<button type=\"button\" class=\"wide workoutBackBtn\" onclick=\"renderWorkoutRoutine()\">← Back to workout</button><h3 style=\"margin-top:14px\">${name==='Warm up'?'🔥':'🫧'} ${name} ✨</h3><p class=\"small\">Tippe jeden Schritt an, wenn du ihn gemacht hast. 💕</p>${steps.map((x,i)=>`<div class=\"task routineStep\" style=\"padding:9px 0\" onclick=\"this.classList.toggle('done');this.querySelector('.check').textContent=this.classList.contains('done')?'✓':''\"><div class=\"check\"></div><div class=\"taskName\">${i+1}. ${x}</div></div>`).join('')}<button class=\"save\" onclick=\"renderWorkoutRoutine()\">Fertig 💕</button>`;
+  box.scrollIntoView({behavior:'smooth',block:'center'});
+}
+
+function renderWorkoutExercises(){
+  const box=document.getElementById('workoutExercises');
+  if(!box) return;
+  ensureWorkouts();
+  const exs=state.workouts[state.selectedWorkout].exercises;
+  const done=exs.filter(e=>e.done).length;
+  const p=document.getElementById('workoutProgressText');
+  if(p) p.textContent=`${done} / ${exs.length} completed`;
+  box.innerHTML=exs.map((e,i)=>{
+    const meta=[e.amount,e.time].filter(Boolean).join(' · ');
+    const special=!!workoutSubroutines[e.name];
+    const safeName=escapeHtmlWorkout(e.name);
+    return `<div class="exerciseRow ${e.done?'done':''}" ${special?`onclick="openWorkoutSubroutine('${e.name.replace(/'/g,"\\'")}')" style="cursor:pointer"`:''}>
+      <button type="button" class="exerciseCheck" onclick="event.stopPropagation();toggleWorkoutExercise(${i})">${e.done?'✓':''}</button>
+      <div class="exerciseInfo">
+        <div class="exerciseName">${special?'✨ ':''}${safeName}</div>
+        <div class="exerciseMeta">${escapeHtmlWorkout(meta || 'Tap when finished')}${special?' · Tap to open tasks':''}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+function renderWorkoutEdit(){
+  const box=document.getElementById('workoutEditExercises');
+  if(!box) return;
+  ensureWorkouts();
+  box.innerHTML=state.workouts[state.selectedWorkout].exercises.map((e,i)=>{
+    const meta=[e.amount,e.time].filter(Boolean).join(' · ');
+    return `<div class="workoutEditRow">
+      <div><strong>${escapeHtmlWorkout(e.name)}</strong><br><span class="small">${escapeHtmlWorkout(meta)}</span></div>
+      <button type="button" onclick="editWorkoutExercise(${i})">Edit</button>
+      <button type="button" onclick="removeWorkoutExercise(${i})">Remove</button>
+    </div>`;
+  }).join('');
+}
+function escapeHtmlWorkout(v){
+  return String(v||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+function toggleWorkoutExercise(i){
+  ensureWorkouts();
+  const ex=state.workouts[state.selectedWorkout].exercises[i];
+  ex.done=!ex.done;
+  save();
+  if(ex.done && typeof celebrate==='function') celebrate();
+  renderWorkoutExercises();
+}
+function addWorkoutExercise(){
+  ensureWorkouts();
+  const name=document.getElementById('exerciseName').value.trim();
+  const amount=document.getElementById('exerciseAmount').value.trim();
+  const time=document.getElementById('exerciseMinutes').value.trim();
+  if(!name) return;
+  state.workouts[state.selectedWorkout].exercises.push({name,amount,time,done:false});
+  save();
+  document.getElementById('exerciseName').value='';
+  document.getElementById('exerciseAmount').value='';
+  document.getElementById('exerciseMinutes').value='';
+  renderWorkoutEdit();
+}
+function editWorkoutExercise(i){
+  ensureWorkouts();
+  const ex=state.workouts[state.selectedWorkout].exercises[i];
+  const name=prompt('Exercise name',ex.name);
+  if(name===null) return;
+  const amount=prompt('Reps (optional)',ex.amount||'');
+  if(amount===null) return;
+  const time=prompt('Time (optional)',ex.time||'');
+  if(time===null) return;
+  ex.name=name.trim()||ex.name; ex.amount=amount.trim(); ex.time=time.trim();
+  save(); renderWorkoutEdit();
+}
+function removeWorkoutExercise(i){
+  ensureWorkouts();
+  state.workouts[state.selectedWorkout].exercises.splice(i,1);
+  save(); renderWorkoutEdit();
+}
+function openWorkoutEdit(){
+  document.getElementById('workoutStartView')?.classList.add('hidden');
+  document.getElementById('workoutActiveView')?.classList.add('hidden');
+  document.getElementById('workoutEditView')?.classList.remove('hidden');
+  document.getElementById('workoutOptions')?.classList.add('hidden');
+  renderWorkoutEdit();
+}
+function closeWorkoutEdit(){
+  document.getElementById('workoutEditView')?.classList.add('hidden');
+  document.getElementById('workoutStartView')?.classList.remove('hidden');
+  document.getElementById('workoutOptions')?.classList.add('hidden');
+  renderWorkout();
+}
+ensureWorkouts();
+renderWorkout();
+
+function toggleWorkoutExercise(i){
+  ensureWorkouts();
+  const list=state.workouts[state.selectedWorkout].exercises;
+  const ex=list && list[i];
+  if(!ex) return;
+  ex.done=!ex.done;
+  save();
+  renderWorkoutRoutine();
+}
+function addWorkoutExercise(){
+  ensureWorkouts();
+  const name=document.getElementById('exerciseName').value.trim();
+  const amount=document.getElementById('exerciseAmount').value.trim();
+  const time=document.getElementById('exerciseMinutes').value.trim();
+  if(!name) return;
+  state.workouts[state.selectedWorkout].exercises.push({name,amount,time,done:false});
+  save();
+  document.getElementById('exerciseName').value='';
+  document.getElementById('exerciseAmount').value='';
+  document.getElementById('exerciseMinutes').value='';
+  renderWorkout();
+}
+function editWorkoutExercise(i){
+  ensureWorkouts();
+  const ex=state.workouts[state.selectedWorkout].exercises[i];
+  const name=prompt('Exercise name',ex.name);
+  if(name===null) return;
+  const amount=prompt('Reps (optional)',ex.amount||'');
+  if(amount===null) return;
+  const time=prompt('Time (optional)',ex.time||'');
+  if(time===null) return;
+  ex.name=name.trim()||ex.name;
+  ex.amount=amount.trim();
+  ex.time=time.trim();
+  save(); renderWorkout();
+}
+function removeWorkoutExercise(i){
+  ensureWorkouts();
+  state.workouts[state.selectedWorkout].exercises.splice(i,1);
+  save(); renderWorkout();
+}
+
+ensureWorkouts();
+renderWorkout();
+document.addEventListener('click',function(e){if(e.target&&e.target.id==='memoryNoteModal')closeMemoryNoteModal();});
+
+// Final workout implementation — robust, self-contained.
+function forceStartWorkout(key){
+  const routines={
+    soft:{title:'Soft Glow',desc:'Gentle full-body movement for a soft glow. 🌷',exercises:[
+      {name:'Warm up',amount:'',time:'5 min'},{name:'Running',amount:'',time:'10 min'},{name:'Squats',amount:'15 reps',time:''},{name:'Plank',amount:'',time:'30 sec'},{name:'Sit-ups',amount:'12 reps',time:''},{name:'Bicycle Crunches',amount:'12 reps',time:''},{name:'Mountain Climbers',amount:'12 reps',time:''},{name:'Cool down',amount:'',time:'5 min'}]},
+    lower:{title:'Lower Body Glow',desc:'A lower-body focused routine you can customize. 🍑',exercises:[
+      {name:'Warm up',amount:'',time:'5 min'},{name:'Running',amount:'',time:'8 min'},{name:'Squats',amount:'15 reps',time:''},{name:'Lunges',amount:'10 reps / side',time:''},{name:'Glute Bridges',amount:'15 reps',time:''},{name:'Cool down',amount:'',time:'5 min'}]},
+    full:{title:'Full Body Glow',desc:'Your all-round home workout — edit it however you like. ✨',exercises:[
+      {name:'Warm up',amount:'',time:'5 min'},{name:'Running',amount:'',time:'10 min'},{name:'Squats',amount:'15 reps',time:''},{name:'Plank',amount:'',time:'30 sec'},{name:'Sit-ups',amount:'12 reps',time:''},{name:'Bicycle Crunches',amount:'12 reps',time:''},{name:'Mountain Climbers',amount:'12 reps',time:''},{name:'Cool down',amount:'',time:'5 min'}]}
+  };
+  if(!routines[key]) key='soft';
+  state.workouts=state.workouts||{};
+  const existing=state.workouts[key];
+  if(!existing || !Array.isArray(existing.exercises) || !existing.exercises.length){ state.workouts[key]=JSON.parse(JSON.stringify(routines[key])); }
+  state.selectedWorkout=key;
+  const start=document.getElementById('workoutStartView');
+  const active=document.getElementById('workoutActiveView');
+  const edit=document.getElementById('workoutEditView');
+  const options=document.getElementById('workoutOptions');
+  const box=document.getElementById('routineBox');
+  if(start) start.classList.add('hidden');
+  if(edit) edit.classList.add('hidden');
+  if(options) options.classList.add('hidden');
+  if(active) active.classList.remove('hidden');
+  if(box){box.style.display='block'; renderWorkoutRoutine();}
+  try{save();}catch(e){}
+}
+
+function renderWorkoutRoutine(){
+  const box=document.getElementById('routineBox');
+  if(!box)return;
+  const fallback={soft:'Soft Glow',lower:'Lower Body Glow',full:'Full Body Glow'};
+  const data=(state.workouts&&state.workouts[state.selectedWorkout])||null;
+  if(!data || !Array.isArray(data.exercises)){
+    box.innerHTML='<h3>🏋️‍♀️ Workout</h3><p>Bitte wähle ein Workout aus. 💕</p>';return;
+  }
+  box.style.display='block';
+  box.innerHTML='<h3 style="margin-top:0">'+escapeHtmlWorkout(data.title||fallback[state.selectedWorkout]||'Workout')+' ✨</h3>'+ 
+    '<p class="small">Tippe Warm-Up oder Cool-Down an, um die eigene Liste zu öffnen. Die anderen Übungen kannst du direkt abhaken. 💕</p>'+
+    data.exercises.map(function(e,i){
+      const special=e.name==='Warm up'||e.name==='Cool down';
+      const meta=[e.amount,e.time].filter(Boolean).join(' · ');
+      const subCount=special ? (e.name==='Warm up' ? 5 : 4) : 0;
+      const click=special ? "openWorkoutSubroutine('"+e.name+"')" : 'toggleWorkoutExercise('+i+')';
+      return '<div class="task routineStep '+(e.done?'done':'')+'" style="padding:11px 0;cursor:pointer" onclick="'+click+'"><div class="check">'+(e.done?'✓':'')+'</div><div><div class="taskName">'+(i+1)+'. '+escapeHtmlWorkout(e.name)+'</div><div class="taskMeta">'+escapeHtmlWorkout(meta||(special ? ('Tap to open · '+subCount+' exercises') : 'Tap when finished'))+'</div></div></div>';
+    }).join('')+
+    '<button type="button" class="save" onclick="exitWorkout()">Finish workout 💕</button>';
+}
+
+function openWorkoutSubroutine(name){
+  const lists={
+    'Warm up':['March in place 🚶‍♀️ · 1 min','Arm circles 💪 · 30 sec','Leg swings 🦵 · 30 sec each side','Gentle side steps ↔️ · 1 min','Easy stretching 🧘‍♀️ · 1 min'],
+    'Cool down':["Child's pose 🧘‍♀️",'Gentle forward stretch 🌷','Seated leg stretch 🦵','Deep, relaxed breathing 🌬️']
+  };
+  const steps=lists[name],box=document.getElementById('routineBox');
+  if(!steps||!box)return;
+  box.innerHTML='<button type="button" class="wide workoutBackBtn" onclick="renderWorkoutRoutine()">← Back to workout</button><h3 style="margin-top:14px">'+(name==='Warm up'?'🔥':'🫧')+' '+name+' ✨</h3><p class="small">Tippe jeden einzelnen Schritt an. Dann bekommt er einen Haken. 💕</p>'+steps.map(function(x,i){return '<div class="task routineStep subroutineStep" style="padding:11px 0;cursor:pointer" onclick="this.classList.toggle(\'done\'); this.querySelector(\'.check\').textContent=this.classList.contains(\'done\')?\'✓\':\'\'"><div class="check"></div><div class="taskName">'+(i+1)+'. '+escapeHtmlWorkout(x)+'</div></div>';}).join('')+'<button type="button" class="save" onclick="renderWorkoutRoutine()">Back to workout 💕</button>';
+}
+</script>
+
+<div id="memoryNoteModal" class="memoryNoteModal" aria-hidden="true">
+  <div class="memoryNoteModalBox" role="dialog" aria-modal="true" aria-labelledby="memoryNoteModalTitle">
+    <h3 id="memoryNoteModalTitle" style="margin:0 0 10px">💭 Add a note</h3>
+    <textarea id="memoryNoteInput" placeholder="Write your thought 💕"></textarea>
+    <div class="memoryNoteModalActions">
+      <button type="button" class="btn" style="background:#fff0f6;color:#9a5874;border:1px solid #edbfd1" onclick="closeMemoryNoteModal()">Cancel</button>
+      <button type="button" class="btn" onclick="saveMemoryNoteModal()">Save 💕</button>
+    </div>
+  </div>
+</div>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(() => {}));
+}
+</script>
+</body></html>
