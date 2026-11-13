@@ -178,6 +178,26 @@ body.dark .journal{background:var(--surface);color:var(--text)}
 #outfitLightboxTitle{color:#fff0f6;font-weight:700;text-align:center}
 #outfitLightbox button{border:1px solid #f3c8da;background:#fff0f6;color:#a64d79;border-radius:999px;padding:9px 16px;font-weight:700}
 
+
+/* My Glow achievement surprises — isolated styles; existing Rewards remain untouched. */
+.achievementGrid{display:grid;grid-template-columns:1fr;gap:10px;margin-top:12px}
+.achievementCard{background:linear-gradient(135deg,#fff8fb,#fff0f6);border:1px solid #f0cbdc;border-radius:17px;padding:13px;display:flex;gap:11px;align-items:flex-start;box-shadow:0 4px 14px rgba(160,92,120,.06)}
+.achievementIcon{width:43px;height:43px;flex:0 0 43px;border-radius:14px;background:#ffe6f0;display:flex;align-items:center;justify-content:center;font-size:23px}
+.achievementCard.isLocked{opacity:.76;background:#fffafd}
+.achievementCard.isUnlocked{border-color:#e6a9c3;background:linear-gradient(135deg,#fff0f6,#fff9fc)}
+.achievementInfo{min-width:0;flex:1}.achievementName{font-weight:800;color:#985675}.achievementDesc{font-size:12px;color:#8e7180;margin-top:3px;line-height:1.4}.achievementGift{margin-top:8px;padding:9px 10px;border-radius:12px;background:#fff;border:1px solid #f1d7e3;color:#80556b;font-size:12px;line-height:1.45}.achievementGift b{color:#a64d79}.achievementStatus{font-size:11px;color:#a56b86;margin-top:6px;font-weight:700}.achievementRedeem{margin-top:7px;border:1px solid #e8b5cb;background:#fff;color:#9a5874;border-radius:10px;padding:6px 9px;font-size:11px;font-weight:700}
+.achievementSurpriseOverlay{position:fixed;inset:0;z-index:10020;background:rgba(82,43,62,.38);display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(5px)}
+.achievementSurpriseOverlay.open{display:flex}
+.achievementSurpriseBox{width:min(100%,390px);background:linear-gradient(155deg,#fffafd,#fff0f6);border:1px solid #f0c7d9;border-radius:27px;padding:24px 20px;text-align:center;box-shadow:0 18px 55px rgba(112,52,79,.24);color:#80556b;animation:achievementPop .35s ease-out}
+.achievementSurpriseBox .surpriseConfetti{font-size:28px;letter-spacing:5px}
+.achievementSurpriseBox .surpriseGiftIcon{font-size:56px;margin:10px 0 4px}
+.achievementSurpriseBox h2{margin:5px 0 7px;color:#a64d79;font-size:23px}
+.achievementSurpriseBox p{margin:7px 0;line-height:1.5}
+.achievementSurpriseBox .surpriseReward{margin:15px 0;padding:15px;border:1px solid #efc5d7;border-radius:17px;background:#fff;color:#80556b}
+.achievementSurpriseBox .surpriseReward strong{display:block;color:#a64d79;font-size:16px;margin-bottom:5px}
+.achievementSurpriseBox button{border:0;border-radius:14px;background:#e9a9c5;color:#fff;font-weight:800;padding:12px 20px;margin-top:10px;width:100%}
+@keyframes achievementPop{from{opacity:0;transform:translateY(12px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+
 </style>
 <link href="manifest.json" rel="manifest"/>
 <link href="icons/apple-touch-icon.png" rel="apple-touch-icon"/>
@@ -296,6 +316,7 @@ function save(){
    xp:Number((state.xpHistory||{})[key]||0)
  };
  localStorage.setItem('myGlowV3',JSON.stringify(state));
+ try{checkAchievements();}catch(e){console.warn('Achievement check skipped',e);}
 }
 function xpTotal(){return Math.max(0,Math.round(state.xp||0));}
 function level(){return Math.max(1,Math.floor(xpTotal()/100)+1)}
@@ -1339,10 +1360,25 @@ function openWorkoutSubroutine(name){
 </div>
 </div>
 </div>
+<div aria-hidden="true" class="achievementSurpriseOverlay" id="achievementSurpriseModal" role="dialog" aria-modal="true" aria-labelledby="achievementSurpriseName" onclick="if(event.target===this)closeAchievementSurprise()">
+ <div class="achievementSurpriseBox">
+  <div class="surpriseConfetti">✨ 💗 🎀</div>
+  <div class="surpriseGiftIcon" id="achievementSurpriseIcon">🎁</div>
+  <div style="font-size:11px;font-weight:800;letter-spacing:1.2px;color:#b27693">NEW ACHIEVEMENT UNLOCKED</div>
+  <h2 id="achievementSurpriseName">Booklover</h2>
+  <p id="achievementSurpriseDesc">You did it!</p>
+  <div class="surpriseReward"><div id="achievementSurpriseKind" style="font-size:11px;font-weight:800;color:#b27693;margin-bottom:6px">Your surprise</div><strong id="achievementSurpriseGiftTitle">A little gift for you</strong><p id="achievementSurpriseGiftDetail" style="margin:0">Your surprise is waiting!</p></div>
+  <button type="button" onclick="closeAchievementSurprise()">Open my surprise 💗</button>
+ </div>
+</div>
 <script>
 // Added My Glow features. Uses the same local device storage as the original app.
 state.littleWins=Array.isArray(state.littleWins)?state.littleWins:[];
 state.readingBooks=Array.isArray(state.readingBooks)?state.readingBooks:[];
+state.achievementStats=state.achievementStats&&typeof state.achievementStats==='object'?state.achievementStats:{};
+if(!Number.isFinite(Number(state.achievementStats.littleWinsTotal)))state.achievementStats.littleWinsTotal=state.littleWins.length;
+state.unlockedAchievements=state.unlockedAchievements&&typeof state.unlockedAchievements==='object'?state.unlockedAchievements:{};
+state.pendingAchievementSurprises=Array.isArray(state.pendingAchievementSurprises)?state.pendingAchievementSurprises:[];
 state.outfitEntries=Array.isArray(state.outfitEntries)?state.outfitEntries:[];
 state.visionBoardEntries=Array.isArray(state.visionBoardEntries)?state.visionBoardEntries:[];
 state.extraLists=state.extraLists&&typeof state.extraLists==='object'?state.extraLists:{};
@@ -1353,7 +1389,7 @@ state.budgetRecurring=Array.isArray(state.budgetRecurring)?state.budgetRecurring
 state.outfitEntries.forEach(o=>{if(o&&!Array.isArray(o.images))o.images=o.image?[o.image]:[];});
 function safeFeatureText(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function renderLittleWins(){const el=document.getElementById('littleWinsList');if(!el)return;el.innerHTML=state.littleWins.length?state.littleWins.map((x,i)=>`<div class="littleWinItem"><span>💗</span><span style="flex:1">${safeFeatureText(x.text)}</span><button aria-label="Delete little win" onclick="removeLittleWin(${i})">×</button></div>`).join(''):'<div class="featureEmpty">Your little wins will appear here. Every small step counts. ✨</div>';}
-function addLittleWin(){const input=document.getElementById('littleWinInput'),text=(input?.value||'').trim();if(!text)return;state.littleWins.unshift({text,date:localDateKey()});save();if(input)input.value='';renderLittleWins();}
+function addLittleWin(){const input=document.getElementById('littleWinInput'),text=(input?.value||'').trim();if(!text)return;state.littleWins.unshift({text,date:localDateKey()});state.achievementStats=state.achievementStats||{};state.achievementStats.littleWinsTotal=(Number(state.achievementStats.littleWinsTotal)||0)+1;save();if(input)input.value='';renderLittleWins();}
 function removeLittleWin(i){state.littleWins.splice(i,1);save();renderLittleWins();}
 function renderSimpleList(type){const el=document.getElementById(type+'List');if(!el)return;const items=Array.isArray(state.extraLists[type])?state.extraLists[type]:[];el.innerHTML=items.length?items.map((x,i)=>{const images=Array.isArray(x.images)?x.images:(x.image?[x.image]:[]);return `<div class="simpleItem ${x.done?'simpleItemDone':''}">${type==='wishlist'&&images.length?`<div class="outfitPhotoGrid">${images.map((image,j)=>`<img src="${image}" alt="${safeFeatureText(x.text)} picture ${j+1}" role="button" tabindex="0" onclick="openFeatureImage('wishlist',${i},${j})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openFeatureImage('wishlist',${i},${j})}">`).join('')}</div>`:''}<span class="simpleItemText ${x.done?'isDone':''}">${x.done?'🎀':'💗'} ${safeFeatureText(x.text)}</span><div class="simpleItemActions"><button class="pinkDoneButton" aria-label="${x.done?'Undo completion':'Mark complete'}" onclick="toggleSimpleItem('${type}',${i})">${x.done?'↶ Undo':'♡ Done'}</button><button class="pinkDeleteButton" onclick="removeSimpleItem('${type}',${i})">Remove</button></div></div>`;}).join(''):'<div class="featureEmpty">Nothing here yet — add your first one. 🌷</div>'; }
 async function addSimpleItem(type){const input=document.getElementById(type+'Input'),text=(input?.value||'').trim();if(!text)return;state.extraLists[type]=Array.isArray(state.extraLists[type])?state.extraLists[type]:[];let images=[];if(type==='wishlist'){const fileInput=document.getElementById('wishlistImageInput');for(const file of Array.from(fileInput?.files||[])){if(file.type.startsWith('image/'))images.push(await resizeImageData(file));}}state.extraLists[type].push({text,done:false,...(type==='wishlist'?{images}: {})});save();input.value='';if(type==='wishlist'){const fileInput=document.getElementById('wishlistImageInput');if(fileInput)fileInput.value='';}renderSimpleList(type);}
@@ -1381,7 +1417,76 @@ function renderOutfits(){const el=document.getElementById('outfitsList');if(!el)
 function openOutfitImage(i,j=0){const x=state.outfitEntries[i];if(!x)return;const images=Array.isArray(x.images)?x.images:(x.image?[x.image]:[]);const image=images[j];if(!image)return;const modal=document.getElementById('outfitLightbox'),img=document.getElementById('outfitLightboxImage'),title=document.getElementById('outfitLightboxTitle');if(img)img.src=image;if(title)title.textContent=`${x.name} · ${j+1} of ${images.length}`;if(modal){modal.classList.add('open');modal.setAttribute('aria-hidden','false');}}
 function closeOutfitImage(){const modal=document.getElementById('outfitLightbox');if(modal){modal.classList.remove('open');modal.setAttribute('aria-hidden','true');}}
 function deleteOutfit(i){state.outfitEntries.splice(i,1);save();renderOutfits();}
-function renderAchievements(){const el=document.getElementById('achievementList');if(!el)return;const tasksDone=(state.tasks||[]).filter(Boolean).length,bookCount=state.readingBooks.filter(x=>x.status==='finished').length,wins=state.littleWins.length;const items=[['🌷','First little steps',tasksDone>0,'Complete your first daily task'],['✨','Glow starter',(state.xp||0)>=100,'Collect 100 XP'],['📚','Book lover',bookCount>0,'Finish your first book'],['💗','Little wins collector',wins>=5,'Save 5 little wins']];el.innerHTML=items.map(x=>`<div class="simpleItem">${x[2]?'🏅':'🔒'} ${x[0]} <b>${x[1]}</b><div class="small">${x[3]}</div></div>`).join('');}
+const achievementDefinitions=[
+ {id:'task-tally',icon:'🌷',name:'Little Task Lover',description:'Complete 10 daily tasks in total.',progress:()=>achievementTaskTotal(),goal:10,unit:'tasks',giftType:'mixed'},
+ {id:'booklover',icon:'📚',name:'Booklover',description:'Finish your first book in My Reading.',progress:()=>((state.readingBooks||[]).filter(b=>b.status==='finished').length),goal:1,unit:'book',giftType:'mixed'},
+ {id:'page-turner',icon:'📖',name:'Page Turner',description:'Read 20 pages in one of your saved books.',progress:()=>Math.max(0,...(state.readingBooks||[]).map(b=>Number(b.pagesRead)||0)),goal:20,unit:'pages',giftType:'mixed'},
+ {id:'hydration-babe',icon:'💧',name:'Hydration Babe',description:'Reach your 8-glass water goal on 7 different days.',progress:()=>achievementHydrationDays(),goal:7,unit:'days',giftType:'mixed'},
+ {id:'journal-girl',icon:'💌',name:'Journal Girl',description:'Save a journal entry on 7 different days.',progress:()=>achievementJournalDays(),goal:7,unit:'days',giftType:'mixed'},
+ {id:'little-wins',icon:'🎀',name:'Little Wins Collector',description:'Add 10 little wins to celebrate your progress.',progress:()=>Number(state.achievementStats?.littleWinsTotal)||0,goal:10,unit:'little wins',giftType:'mixed'},
+ {id:'workout-girl',icon:'🧘‍♀️',name:'Workout Girl',description:'Complete 20 workout steps in your routines.',progress:()=>achievementWorkoutSteps(),goal:20,unit:'steps',giftType:'mixed'},
+ {id:'glow-challenge',icon:'✨',name:'30-Day Glow Girl',description:'Complete all 30 days of your Glow Up challenge.',progress:()=>((state.challenge||[]).filter(Boolean).length),goal:30,unit:'days',giftType:'mixed'}
+];
+const achievementGiftPool=[
+ {kind:'Digital surprise',icon:'💌',title:'A little love note',detail:'Your secret message: You are allowed to be proud of every small step. Keep choosing yourself, one gentle day at a time. 💗'},
+ {kind:'Digital surprise',icon:'📓',title:'Your mini journal moment',detail:'A special journal prompt just for you: What is one thing about yourself that you are beginning to appreciate more?'},
+ {kind:'Digital surprise',icon:'🎀',title:'A special Glow title',detail:'You have unlocked the title “My Own Kind of Magic”. A little reminder that your progress belongs to you.'},
+ {kind:'Digital surprise',icon:'🌷',title:'A secret self-care mini challenge',detail:'Your treat: choose one evening this week for a 30-minute phone-free reset with your favourite music and something cozy.'},
+ {kind:'Real-life treat',icon:'🫧',title:'Spa-night voucher',detail:'Your voucher: one at-home spa evening, with your favourite shower or bath routine, cozy clothes and absolutely no rushing.'},
+ {kind:'Real-life treat',icon:'💅',title:'Beauty treat voucher',detail:'Your voucher: choose one little beauty treat you have been wanting, within a budget that feels comfortable.'},
+ {kind:'Real-life treat',icon:'☕',title:'Cozy café date voucher',detail:'Your voucher: enjoy a favourite drink or snack at a café, just because you have earned a little moment for yourself.'},
+ {kind:'Real-life treat',icon:'📚',title:'Bookshop treat voucher',detail:'Your voucher: set aside a little amount that feels right for a new book, or enjoy a long, cozy reading date.'},
+ {kind:'Real-life treat',icon:'👑',title:'Princess day voucher',detail:'Your voucher: plan a special day for yourself with your favourite outfit, food, music and something that makes you feel lovely.'},
+ {kind:'Real-life treat',icon:'🌸',title:'Fresh flowers treat',detail:'Your voucher: bring home a small bunch of flowers or another pretty little thing to brighten your room.'}
+];
+function achievementTaskTotal(){const history=state.dailyHistory||{};return Object.values(history).reduce((sum,h)=>sum+Math.max(0,Number(h?.tasksDone)||0),0);}
+function achievementHydrationDays(){return Object.values(state.dailyHistory||{}).filter(h=>Number(h?.water)>=8).length;}
+function achievementJournalDays(){return Object.values(state.journalEntries||{}).filter(v=>String(v||'').trim().length>0).length;}
+function achievementWorkoutSteps(){const workouts=state.workouts||{};return Object.values(workouts).reduce((sum,w)=>sum+(Array.isArray(w?.exercises)?w.exercises.filter(x=>x&&x.done).length:0),0);}
+function achievementProgress(def){try{return Math.max(0,Number(def.progress())||0);}catch(e){return 0;}}
+function pickAchievementGift(){return achievementGiftPool[Math.floor(Math.random()*achievementGiftPool.length)];}
+function checkAchievements(){
+ if(!Array.isArray(state.pendingAchievementSurprises))state.pendingAchievementSurprises=[];
+ if(!state.unlockedAchievements||typeof state.unlockedAchievements!=='object')state.unlockedAchievements={};
+ let changed=false;
+ achievementDefinitions.forEach(def=>{
+  if(state.unlockedAchievements[def.id])return;
+  if(achievementProgress(def)>=def.goal){
+   const gift=pickAchievementGift();
+   state.unlockedAchievements[def.id]={date:localDateKey(),gift:{...gift},redeemed:false};
+   state.pendingAchievementSurprises.push(def.id);
+   changed=true;
+  }
+ });
+ if(changed){try{localStorage.setItem('myGlowV3',JSON.stringify(state));}catch(e){}renderAchievements();showAchievementSurprise();}
+}
+function renderAchievements(){
+ const el=document.getElementById('achievementList');if(!el)return;
+ el.className='achievementGrid';
+ el.innerHTML=achievementDefinitions.map(def=>{
+  const unlocked=state.unlockedAchievements?.[def.id],progress=achievementProgress(def),pct=Math.min(100,Math.round(progress/def.goal*100));
+  const gift=unlocked?.gift;
+  return `<article class="achievementCard ${unlocked?'isUnlocked':'isLocked'}"><div class="achievementIcon">${def.icon}</div><div class="achievementInfo"><div class="achievementName">${def.name} ${unlocked?'✨':'🔒'}</div><div class="achievementDesc">${def.description}</div>${unlocked?`<div class="achievementStatus">Unlocked · ${safeFeatureText(unlocked.date||'')}</div><div class="achievementGift"><b>${gift?.icon||'🎁'} ${safeFeatureText(gift?.kind||'Surprise')} · ${safeFeatureText(gift?.title||'Your gift')}</b><br>${safeFeatureText(gift?.detail||'A little surprise just for you!')}</div>${unlocked.redeemed?'<div class="achievementStatus">💗 Marked as enjoyed</div>':`<button class="achievementRedeem" type="button" onclick="redeemAchievementGift('${def.id}')">Mark as enjoyed 💗</button>`}`:`<div class="achievementDesc" style="margin-top:7px">Progress: ${Math.min(progress,def.goal)} / ${def.goal} ${def.unit}</div><div style="height:6px;background:#f7dce8;border-radius:99px;overflow:hidden;margin-top:6px"><div style="height:100%;width:${pct}%;background:#e7a2bf;border-radius:99px"></div></div><div class="achievementStatus">Your surprise is still secret 🎁</div>`}</div></article>`;
+ }).join('');
+}
+function redeemAchievementGift(id){const item=state.unlockedAchievements?.[id];if(!item)return;item.redeemed=!item.redeemed;save();renderAchievements();}
+function showAchievementSurprise(){
+ const overlay=document.getElementById('achievementSurpriseModal');if(!overlay||overlay.classList.contains('open'))return;
+ const id=state.pendingAchievementSurprises?.shift();if(!id)return;
+ const def=achievementDefinitions.find(x=>x.id===id),unlocked=state.unlockedAchievements?.[id];if(!def||!unlocked){try{localStorage.setItem('myGlowV3',JSON.stringify(state));}catch(e){}return showAchievementSurprise();}
+ const gift=unlocked.gift||{};
+ document.getElementById('achievementSurpriseIcon').textContent=gift.icon||'🎁';
+ document.getElementById('achievementSurpriseName').textContent=def.name;
+ document.getElementById('achievementSurpriseDesc').textContent='You did it! You unlocked a special My Glow achievement.';
+ document.getElementById('achievementSurpriseKind').textContent=gift.kind||'Your surprise';
+ document.getElementById('achievementSurpriseGiftTitle').textContent=gift.title||'A little gift for you';
+ document.getElementById('achievementSurpriseGiftDetail').textContent=gift.detail||'A little surprise just for you!';
+ overlay.classList.add('open');overlay.setAttribute('aria-hidden','false');
+ try{localStorage.setItem('myGlowV3',JSON.stringify(state));}catch(e){}
+ try{playSparkleSound();celebrate();}catch(e){}
+}
+function closeAchievementSurprise(){const overlay=document.getElementById('achievementSurpriseModal');if(overlay){overlay.classList.remove('open');overlay.setAttribute('aria-hidden','true');}showAchievementSurprise();}
+
 const confidenceReminderSets=[
  ['Nobody can actually beat you at being you. ✨','Focus on yourself and your own growth. 🌷','You are allowed to take up space. 💕'],
  ['You do not need permission to be proud of yourself. 🎀','Your pace is still progress. 🌸','You deserve the same kindness you give others. 💗'],
@@ -1411,5 +1516,6 @@ function renderAddedFeatures(){renderLittleWins();['lifestyle','confidence','sel
 // Keep the existing My Rewards feature inside the single Badges navigation destination.
 (function(){const slot=document.getElementById('badgesRewardsSlot');const rewards=document.getElementById('rewardsList')?.closest('.section.card');if(slot&&rewards)slot.appendChild(rewards);renderDailyQuote();renderAddedFeatures();loadVisionNote();renderVisionNotes();try{ensureBudgetMonth(localDateKey().slice(0,7));save();}catch(e){}const originalShow=window.show;if(typeof originalShow==='function'){window.show=function(id,btn){originalShow(id,btn);if(id==='badges')renderAchievements();if(id==='reading')renderBooks();if(id==='outfits')renderOutfits();if(id==='more')renderBudget();if(id==='home')renderLittleWins();};}})();
 </script>
+<script>window.addEventListener('load',function(){try{checkAchievements();showAchievementSurprise();}catch(e){}});</script>
 <div aria-hidden="true" aria-label="Outfit picture preview" aria-modal="true" id="outfitLightbox" onclick="if(event.target===this)closeOutfitImage()" role="dialog"><button onclick="closeOutfitImage()" type="button">Close ✕</button><img alt="Outfit preview" id="outfitLightboxImage"/><div id="outfitLightboxTitle"></div></div>
 </body></html>
